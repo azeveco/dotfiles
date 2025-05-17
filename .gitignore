@@ -2,3 +2,5 @@
 .lsp
 
 lazygit/state.yml
+
+nvim/lazy-lock.json
