@@ -25,6 +25,7 @@ return {
   branch = "harpoon2",
   dependencies = { "nvim-lua/plenary.nvim" },
   keys = {
+    { "<leader>H", false }, -- Disable default <leader>H keymap to open Harpoon quick menu
     {
       "<leader>h",
       function()
