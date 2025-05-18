@@ -6,3 +6,5 @@ vim.opt.relativenumber = true
 vim.opt.showtabline = 1
 
 vim.opt.clipboard = "unnamedplus"
+
+vim.g.ai_cmp = false
