@@ -5,6 +5,8 @@
 vim.opt.relativenumber = true
 vim.opt.showtabline = 1
 
+-- Improves copy and paste between Windows and WSL
 vim.opt.clipboard = "unnamedplus"
 
+-- Show ghost text when using copilot.lua
 vim.g.ai_cmp = false
