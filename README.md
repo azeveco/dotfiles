@@ -8,6 +8,11 @@ That's it. Nothing else.
 
 What were you expecting?
 
+## tmux and TPM
+
+Always install TPM first:
+https://github.com/tmux-plugins/tpm
+
 ## Troubleshooting GitHub Copilot Authentication on WSL
 
 If you encounter issues with Copilot auth on WSL, try the following steps:
