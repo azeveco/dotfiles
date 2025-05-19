@@ -11,7 +11,7 @@ What were you expecting?
 ## tmux and TPM
 
 Always install TPM first:
-https://github.com/tmux-plugins/tpm
+<https://github.com/tmux-plugins/tpm>
 
 ## Troubleshooting GitHub Copilot Authentication on WSL
 
@@ -36,15 +36,13 @@ If you encounter issues with Copilot auth on WSL, try the following steps:
   ```
 
 Open a browser and complete the authentication flow by visiting the provided
-verification_uri (in this case github.com/login/device) and entering the user_code.
+verification_uri (in this case <https://github.com/login/device>) and entering the user_code.
 
-* Run the following curl command to get the access token:
+* Run the following curl command to get the access token (replace YOUR_DEVICE_CODE with the actual device code you received in step 1):
 
   ```bash
   curl -s https://github.com/login/oauth/access_token -X POST -d "client_id=Iv1.b507a08c87ecfe98&device_code=YOUR_DEVICE_CODE&grant_type=urn:ietf:params:oauth:grant-type:device_code" | grep -o "access_token=[^&]*" | cut -d= -f2
   ```
-
-Replace YOUR_DEVICE_CODE with the actual device code you receivedin step 1.
 
 This will return the token you need.
 
