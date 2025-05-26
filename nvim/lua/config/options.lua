@@ -9,7 +9,7 @@ vim.opt.showtabline = 1
 vim.opt.clipboard = "unnamedplus"
 
 -- Show ghost text when using copilot.lua
-vim.g.ai_cmp = false
+-- vim.g.ai_cmp = false
 
 -- Disable vim-tmux-navigator while zoomed in tmux pane
 vim.g.tmux_navigator_disable_when_zoomed = 1
