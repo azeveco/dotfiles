@@ -1,0 +1,20 @@
+[general]
+import = [ "~/.config/alacritty/theme.toml", "~/.config/alacritty/font.toml", "~/.config/alacritty/font-size.toml", "~/.config/alacritty/shared.toml" ]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+decorations = "None"  # Remove a barra de título
+padding = { x = 5, y = 5 }
+option_as_alt = "Both"
+
+[[keyboard.bindings]]
+key = "Left"
+mods = "Alt"
+chars = "\u001bb"  # Alt + b = mover uma palavra para trás
+
+[[keyboard.bindings]]
+key = "Right"
+mods = "Alt"
+chars = "\u001bf"  # Alt + f = mover uma palavra para frente
