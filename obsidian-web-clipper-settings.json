@@ -1,0 +1,179 @@
+{
+  "general_settings": {
+    "betaFeatures": false,
+    "legacyMode": false,
+    "saveBehavior": "addToObsidian",
+    "showMoreActionsButton": false,
+    "silentOpen": true
+  },
+  "highlighter_settings": {
+    "alwaysShowHighlights": true,
+    "highlightBehavior": "highlight-inline",
+    "highlighterEnabled": true
+  },
+  "interpreter_settings": {
+    "defaultPromptContext": "",
+    "interpreterAutoRun": false,
+    "interpreterEnabled": false,
+    "interpreterModel": "",
+    "models": [],
+    "providers": []
+  },
+  "migrationVersion": 1,
+  "property_types": [
+    {
+      "defaultValue": "{{title}}",
+      "name": "title",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{url}}",
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "name": "author",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{published}}",
+      "name": "published",
+      "type": "date"
+    },
+    {
+      "defaultValue": "{{date}}",
+      "name": "created",
+      "type": "date"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "tags",
+      "type": "multitext"
+    }
+  ],
+  "reader_settings": {
+    "fontSize": 1.5,
+    "lineHeight": 1.6,
+    "maxWidth": 38,
+    "theme": "default",
+    "themeMode": "auto"
+  },
+  "stats": {
+    "addToObsidian": 63,
+    "copyToClipboard": 0,
+    "saveFile": 0,
+    "share": 0
+  },
+  "template_1746198827880pxiuhuria": {
+    "id": "1746198827880pxiuhuria",
+    "name": "Default",
+    "behavior": "create",
+    "noteNameFormat": "{{title}}",
+    "path": "1 - Quick Notes/Clippings",
+    "noteContentFormat": "{{content}}",
+    "context": "",
+    "properties": [
+      {
+        "id": "17461988278805f5e9ityr",
+        "name": "title",
+        "value": "{{title}}",
+        "type": "text"
+      },
+      {
+        "id": "1746198827880cvrjni8nk",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "1746198827880ny8m4losk",
+        "name": "author",
+        "value": "{{author|split:\\\", \\\"|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1746198827880fxzgb6aoi",
+        "name": "published",
+        "value": "{{published}}",
+        "type": "date"
+      },
+      {
+        "id": "1746198827880rblokushc",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "17461988278803jqwnxppf",
+        "name": "description",
+        "value": "{{description}}",
+        "type": "text"
+      },
+      {
+        "id": "1746198827880fp6vp3k7e",
+        "name": "tags",
+        "value": "clippings",
+        "type": "multitext"
+      }
+    ],
+    "triggers": []
+  },
+  "template_17469074266599pqws7bwf": {
+    "id": "17469074266599pqws7bwf",
+    "name": "Watch Later",
+    "behavior": "create",
+    "noteNameFormat": "{{schema:@VideoObject:name}}",
+    "path": "2 - Personal/Watch Later",
+    "noteContentFormat": "- [ ] [{{schema:@VideoObject:name}} - {{schema:@VideoObject:author}}]({{url}})\n\n{{url}}",
+    "properties": [
+      {
+        "id": "1746908393104por2tkxys",
+        "name": "tags",
+        "value": "watch-later",
+        "type": "multitext"
+      },
+      {
+        "id": "1746911997153hlxmp075i",
+        "name": "author",
+        "value": "{{schema:@VideoObject:author}}",
+        "type": "multitext"
+      }
+    ],
+    "triggers": [
+      "https://www.youtube.com",
+      "https://youtube.com"
+    ],
+    "context": "",
+    "vault": "The Hivemind"
+  },
+  "template_17469165974411uvqgehu0": {
+    "id": "17469165974411uvqgehu0",
+    "name": "Vim",
+    "behavior": "append-specific",
+    "noteNameFormat": "Vim Resources",
+    "path": "2 - Personal/Vim",
+    "noteContentFormat": "- [{{title}}]({{url}})",
+    "properties": [
+      {
+        "id": "1746916659585l67ldkdoq",
+        "name": "tags",
+        "value": "vim",
+        "type": "multitext"
+      }
+    ],
+    "triggers": [],
+    "context": "",
+    "vault": "The Hivemind"
+  },
+  "template_list": [
+    "1746198827880pxiuhuria",
+    "17469074266599pqws7bwf",
+    "17469165974411uvqgehu0"
+  ],
+  "vaults": [
+    "The Hivemind"
+  ]
+}
