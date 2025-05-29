@@ -46,34 +46,11 @@ alias psql-new-user="sudo -u postgres createuser -s rpg -P"
 alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
 
-alias cleyton="overmind s"
-alias opl="overmind c plat_app"
-alias orpl="overmind r plat_app"
-alias ze="bundle _1.17.3_ exec rails console"
-alias pltest="bundle _1.17.3_ exec m"
-alias plb="bundle _1.17.3_"
-alias ple="bundle _1.17.3_ exec"
-
 alias dcu="docker-compose up"
 alias dcd="docker-compose down"
 
-alias devenv="docker compose -f ~/iugu/dev-env/docker-compose-development.yml up"
-alias deplatform="docker exec -it platform"
-alias deplatcont="docker exec -it platform /bin/bash"
-
-alias dev="~/iugu/dev-env/"
-alias pla="~/iugu/platform/"
-
-# export LDFLAGS="-L/usr/local/opt/libiconv/lib"
-# export CPPFLAGS="-I/usr/local/opt/libiconv/include"
-export LDFLAGS="-L/usr/local/opt/openssl@1.0/lib"
-export CPPFLAGS="-I/usr/local/opt/openssl@1.0/include"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
-
-# CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.0)" RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.0)" rbenv install 2.3.3
-
-# CFLAGS="-Wno-error=implicit-function-declaration" rbenv install 2.2.7
 
 export PATH="/usr/local/sbin:$PATH"
 alias lg='lazygit'
