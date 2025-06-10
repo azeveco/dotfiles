@@ -23,7 +23,10 @@ keymap("n", "<A-l>", "$", {
 })
 
 -- Keymap to do a search and replace
-keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "SR" })
+keymap({ "n", "v" }, "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "SR" })
 
 -- Keymap to run LazyDocker by using the lazydocker.nvim
 keymap({ "n", "t" }, "<leader>fl", "<Cmd>lua LazyDocker.toggle()<CR>", { desc = "LazyDocker" })
+
+-- Blamer
+keymap("n", "<leader>go", ":BlamerToggle<CR>", { desc = "Blamer" })
