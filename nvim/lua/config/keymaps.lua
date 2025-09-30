@@ -30,3 +30,8 @@ keymap({ "n", "t" }, "<leader>fl", "<Cmd>lua LazyDocker.toggle()<CR>", { desc = 
 
 -- Blamer
 keymap("n", "<leader>go", ":BlamerToggle<CR>", { desc = "Blamer" })
+
+-- Wrap selected lines with a delimiter
+keymap("v", "<leader>o", function()
+  require("custom.wrap_selection").wrap_lines()
+end, { desc = "Wrap lines with delimiter" })
