@@ -30,7 +30,23 @@ return {
             list = {
               keys = {
                 ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
+                ["<S-Y>"] = "copy_file_path",
               },
+            },
+          },
+          actions = {
+            copy_file_path = {
+              action = function(_, item)
+                if not item then
+                  return
+                end
+
+                local result = vim.fn.fnamemodify(item.file, ":.")
+                if result then
+                  vim.fn.setreg("+", result)
+                  Snacks.notify.info("Yanked `" .. result .. "`")
+                end
+              end,
             },
           },
         },
