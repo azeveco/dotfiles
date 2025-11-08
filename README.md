@@ -60,3 +60,12 @@ This will return the token you need.
 
 * Replace USERNAME with your git username and YOURTOKEN with the token you got in step 3.
 * Restart Nvim. Run Copilot status. You should be logged in.
+
+## Check battery health on Linux
+* Run the following:
+
+  ```bash
+  upower -i /org/freedesktop/UPower/devices/battery_BAT0
+  ```
+```
+```
