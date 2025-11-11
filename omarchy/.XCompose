@@ -1,0 +1,17 @@
+include "%H/.local/share/omarchy/default/xcompose"
+
+# Identification
+<Multi_key> <space> <n> : "Gabriel Azevedo"
+<Multi_key> <space> <e> : "gazeveco@gmail.com"
+
+# US Internation behaviour of macOS/Windows
+<dead_acute> <c> : "ç" ccedilla
+<dead_acute> <C> : "Ç" Ccedilla
+
+<dead_acute> <v> : "'v" acute
+<dead_acute> <s> : "'s" acute
+<dead_acute> <r> : "'r" acute
+<dead_acute> <m> : "'m" acute
+<dead_acute> <l> : "'l" acute
+<dead_acute> <d> : "'d" acute
+<dead_acute> <t> : "'t" acute
