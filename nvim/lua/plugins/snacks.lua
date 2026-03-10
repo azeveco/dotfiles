@@ -16,6 +16,39 @@ return {
       matcher = {
         smartcase = false, -- Allow search to be case-insensitive
       },
+      toggles = {
+        ruby_only = "💎",
+        hide_tests = "🚫",
+      },
+      actions = {
+        toggle_ruby = function(picker)
+          if picker.opts.args and vim.tbl_contains(picker.opts.args, "ruby") then
+            picker.opts.args = {} -- Clear args (search all files)
+            picker.opts["ruby_only"] = false
+            Snacks.notify.info("Grep: All Files")
+          else
+            picker.opts.args = { "-t", "ruby" } -- Force Ruby type
+            picker.opts["ruby_only"] = true
+            Snacks.notify.info("Grep: Ruby Only")
+          end
+          -- Trigger the search again with new options
+          picker:find()
+        end,
+        hide_tests = function(picker)
+          -- Check for the specific glob string "!*_test*"
+          if picker.opts.args and vim.tbl_contains(picker.opts.args, "!*_test.rb*") then
+            picker.opts.args = {} -- Clear args (Include tests again)
+            picker.opts["hide_tests"] = false
+            Snacks.notify.info("Grep: Including Tests")
+          else
+            picker.opts.args = { "-g", "!*_test.rb*" } -- Force exclude glob
+            picker.opts["hide_tests"] = true
+            Snacks.notify.info("Grep: Excluding Tests")
+          end
+          -- Trigger the search again
+          picker:find()
+        end,
+      },
       sources = {
         explorer = {
           layout = {
@@ -56,6 +89,8 @@ return {
           keys = {
             ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
             ["<C-e>"] = { "edit_vsplit", mode = { "i", "n" } },
+            ["<a-t>"] = { "toggle_ruby", mode = { "i", "n" } },
+            ["<a-n>"] = { "hide_tests", mode = { "i", "n" } },
           },
         },
         list = {

@@ -1,3 +1,5 @@
+macos-option-as-alt = left
+
 # Background and foreground colors
 background = #0A1428
 foreground = #F0F8FF
