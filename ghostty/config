@@ -23,3 +23,6 @@ palette = 12=#00BFFF
 palette = 13=#FF40A3
 palette = 14=#00BFFF
 palette = 15=#00BFFF
+
+# window-decoration = none
+macos-titlebar-style = hidden
