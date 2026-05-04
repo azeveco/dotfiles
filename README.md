@@ -13,6 +13,12 @@ What were you expecting?
 Always install TPM first:
 <https://github.com/tmux-plugins/tpm>
 
+## Make symlinks to config files on your home or .config directory
+
+```bash
+ln -s ~/dotfiles/.tmux.conf ~/
+```
+
 ## Troubleshooting GitHub Copilot Authentication on WSL
 
 If you encounter issues with Copilot auth on WSL, try the following steps:
@@ -62,10 +68,12 @@ This will return the token you need.
 * Restart Nvim. Run Copilot status. You should be logged in.
 
 ## Check battery health on Linux
+
 * Run the following:
 
   ```bash
   upower -i /org/freedesktop/UPower/devices/battery_BAT0
   ```
+
 ```
 ```
