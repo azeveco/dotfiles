@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neovim Keymaps</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1020;
+        --bg-elevated: rgba(15, 23, 42, 0.78);
+        --bg-muted: rgba(30, 41, 59, 0.72);
+        --border: rgba(148, 163, 184, 0.18);
+        --text: #e2e8f0;
+        --text-muted: #94a3b8;
+        --heading: #f8fafc;
+        --accent: #7c3aed;
+        --accent-soft: rgba(124, 58, 237, 0.16);
+        --accent-2: #22d3ee;
+        --table-head: rgba(51, 65, 85, 0.6);
+        --shadow: 0 20px 60px rgba(2, 6, 23, 0.45);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 28%),
+          radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.2), transparent 30%),
+          linear-gradient(180deg, #020617 0%, var(--bg) 100%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      code {
+        padding: 0.15rem 0.45rem;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.88);
+        font-family:
+          "SFMono-Regular", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 0.92em;
+        white-space: nowrap;
+      }
+
+      .page {
+        width: min(1320px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 40px 0 64px;
+      }
+
+      .hero,
+      .card,
+      .section {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--bg-elevated);
+        backdrop-filter: blur(16px);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 32px;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0 0 12px;
+        color: var(--accent-2);
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--heading);
+        font-size: clamp(2.2rem, 3.6vw, 3.5rem);
+        line-height: 1.05;
+      }
+
+      .subtitle {
+        margin: 14px 0 0;
+        max-width: 68ch;
+        color: var(--text-muted);
+        font-size: 1.02rem;
+        line-height: 1.7;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.6rem 0.9rem;
+        border: 1px solid rgba(124, 58, 237, 0.28);
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: #ddd6fe;
+        font-size: 0.92rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 24px;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .toc {
+        position: sticky;
+        top: 24px;
+        align-self: start;
+      }
+
+      .toc h2,
+      .section h2 {
+        margin: 0 0 14px;
+        color: var(--heading);
+        font-size: 1.35rem;
+      }
+
+      .toc p,
+      .section p {
+        margin: 0 0 14px;
+        color: var(--text-muted);
+        line-height: 1.7;
+      }
+
+      .toc ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .toc li + li {
+        margin-top: 8px;
+      }
+
+      .toc a {
+        display: block;
+        padding: 0.7rem 0.85rem;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        color: var(--text);
+        text-decoration: none;
+        transition:
+          background 0.18s ease,
+          border-color 0.18s ease,
+          transform 0.18s ease;
+      }
+
+      .toc a:hover {
+        border-color: rgba(124, 58, 237, 0.32);
+        background: rgba(124, 58, 237, 0.1);
+        transform: translateX(2px);
+      }
+
+      .content {
+        display: grid;
+        gap: 20px;
+      }
+
+      .section {
+        overflow: hidden;
+      }
+
+      .section-header {
+        padding: 22px 24px 0;
+      }
+
+      .section-body {
+        padding: 0 24px 24px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+      }
+
+      thead th {
+        padding: 0.95rem 1rem;
+        border-bottom: 1px solid var(--border);
+        background: var(--table-head);
+        color: var(--heading);
+        text-align: left;
+        font-size: 0.92rem;
+      }
+
+      tbody td {
+        padding: 0.95rem 1rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        vertical-align: top;
+        line-height: 1.6;
+      }
+
+      tbody tr:hover td {
+        background: rgba(15, 23, 42, 0.45);
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .subsection {
+        margin-top: 24px;
+      }
+
+      .subsection h3 {
+        margin: 0 0 10px;
+        color: var(--heading);
+        font-size: 1.05rem;
+      }
+
+      .callout {
+        margin-bottom: 16px;
+        padding: 14px 16px;
+        border: 1px solid rgba(34, 211, 238, 0.18);
+        border-radius: 14px;
+        background: rgba(8, 47, 73, 0.26);
+        color: #cbd5e1;
+      }
+
+      .sources {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-muted);
+      }
+
+      .sources li + li {
+        margin-top: 0.45rem;
+      }
+
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .toc {
+          position: static;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(100vw - 20px, 1320px);
+          padding-top: 20px;
+        }
+
+        .hero,
+        .card,
+        .section-header,
+        .section-body {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        .hero {
+          padding-top: 24px;
+          padding-bottom: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">Neovim Reference</p>
+        <h1>KEYMAPS</h1>
+        <p class="subtitle">
+          A styled reference for the active custom keymaps in this config, covering
+          global mappings and plugin-local mappings that only exist in specific UI
+          contexts.
+        </p>
+        <div class="meta">
+          <span class="pill">Source: <code>lua/keymaps.lua</code></span>
+          <span class="pill">Source: <code>lua/autocmds.lua</code></span>
+          <span class="pill">Source: <code>lua/azeveco/plugins/*.lua</code></span>
+        </div>
+      </section>
+
+      <div class="grid">
+        <aside class="card toc">
+          <h2>Contents</h2>
+          <p>Jump to a category or the plugin-local mappings at the end.</p>
+          <ul>
+            <li><a href="#general">General</a></li>
+            <li><a href="#diagnostics-quickfix">Diagnostics / Quickfix</a></li>
+            <li><a href="#files-find-explorer">Files / Find / Explorer</a></li>
+            <li><a href="#search">Search</a></li>
+            <li><a href="#windows">Windows</a></li>
+            <li><a href="#tabs">Tabs</a></li>
+            <li><a href="#buffers">Buffers</a></li>
+            <li><a href="#git">Git</a></li>
+            <li><a href="#git-hunks">Git Hunks</a></li>
+            <li><a href="#code-lsp-formatting">Code / LSP / Formatting</a></li>
+            <li><a href="#ui-toggles-notifications">UI / Toggles / Notifications</a></li>
+            <li><a href="#sessions">Sessions</a></li>
+            <li><a href="#debug">Debug</a></li>
+            <li><a href="#motion-jump-plugins">Motion / Jump plugins</a></li>
+            <li><a href="#context-specific">Context-specific / plugin-local</a></li>
+          </ul>
+        </aside>
+
+        <div class="content">
+          <section class="section" id="general">
+            <div class="section-header">
+              <h2>General</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;Esc&gt;</code></td><td><code>n</code></td><td>&mdash;</td><td>Clears search highlighting.</td></tr>
+                  <tr><td><code>&lt;C-s&gt;</code></td><td><code>n</code>, <code>i</code>, <code>x</code>, <code>s</code></td><td>Save File</td><td>Saves the current file and returns to normal mode.</td></tr>
+                  <tr><td><code>&lt;Esc&gt;&lt;Esc&gt;</code></td><td><code>t</code></td><td>Exit terminal mode</td><td>Leaves terminal insert mode and returns to terminal-normal mode.</td></tr>
+                  <tr><td><code>&lt;A-j&gt;</code></td><td><code>n</code></td><td>Move Down</td><td>Moves the current line down.</td></tr>
+                  <tr><td><code>&lt;A-k&gt;</code></td><td><code>n</code></td><td>Move Up</td><td>Moves the current line up.</td></tr>
+                  <tr><td><code>&lt;A-j&gt;</code></td><td><code>i</code></td><td>Move Down</td><td>Moves the current line down while staying in insert mode.</td></tr>
+                  <tr><td><code>&lt;A-k&gt;</code></td><td><code>i</code></td><td>Move Up</td><td>Moves the current line up while staying in insert mode.</td></tr>
+                  <tr><td><code>&lt;A-j&gt;</code></td><td><code>v</code></td><td>Move Down</td><td>Moves the selected lines down and reindents them.</td></tr>
+                  <tr><td><code>&lt;A-k&gt;</code></td><td><code>v</code></td><td>Move Up</td><td>Moves the selected lines up and reindents them.</td></tr>
+                  <tr><td><code>&lt;leader&gt;p</code></td><td><code>x</code></td><td>&mdash;</td><td>Pastes over a selection without overwriting the default register.</td></tr>
+                  <tr><td><code>&lt;leader&gt;_</code></td><td><code>n</code>, <code>v</code></td><td>Delete Without Yanking</td><td>Deletes text into the black-hole register.</td></tr>
+                  <tr><td><code>&lt;leader&gt;r</code></td><td><code>n</code>, <code>v</code></td><td>Search &amp; Replace</td><td>Starts a project-wide substitute using the word under cursor.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="diagnostics-quickfix">
+            <div class="section-header">
+              <h2>Diagnostics / Quickfix</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;cd</code></td><td><code>n</code></td><td>Line Diagnostics</td><td>Opens diagnostics for the current line.</td></tr>
+                  <tr><td><code>]d</code></td><td><code>n</code></td><td>Next Diagnostic</td><td>Jumps to the next diagnostic and opens its float.</td></tr>
+                  <tr><td><code>[d</code></td><td><code>n</code></td><td>Prev Diagnostic</td><td>Jumps to the previous diagnostic and opens its float.</td></tr>
+                  <tr><td><code>]e</code></td><td><code>n</code></td><td>Next Error</td><td>Jumps to the next error diagnostic.</td></tr>
+                  <tr><td><code>[e</code></td><td><code>n</code></td><td>Prev Error</td><td>Jumps to the previous error diagnostic.</td></tr>
+                  <tr><td><code>]w</code></td><td><code>n</code></td><td>Next Warning</td><td>Jumps to the next warning diagnostic.</td></tr>
+                  <tr><td><code>[w</code></td><td><code>n</code></td><td>Prev Warning</td><td>Jumps to the previous warning diagnostic.</td></tr>
+                  <tr><td><code>&lt;leader&gt;xl</code></td><td><code>n</code></td><td>Open Diagnostic Location List</td><td>Sends diagnostics to the location list.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="files-find-explorer">
+            <div class="section-header">
+              <h2>Files / Find / Explorer</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;fn</code></td><td><code>n</code></td><td>New File</td><td>Opens a new empty buffer.</td></tr>
+                  <tr><td><code>\</code></td><td><code>n</code></td><td>NeoTree reveal</td><td>Reveals the current file in Neo-tree.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;space&gt;</code></td><td><code>n</code></td><td>Find Files (Root Dir)</td><td>Opens Snacks file picker scoped to the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;,</code></td><td><code>n</code></td><td>Buffers</td><td>Opens Snacks buffer picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;:</code></td><td><code>n</code></td><td>Command History</td><td>Opens Snacks command history picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;e</code></td><td><code>n</code></td><td>Explorer Snacks (root dir)</td><td>Opens Snacks explorer at the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;E</code></td><td><code>n</code></td><td>Explorer Snacks (cwd)</td><td>Opens Snacks explorer at the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fb</code></td><td><code>n</code></td><td>Buffers</td><td>Opens Snacks buffer picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fB</code></td><td><code>n</code></td><td>Buffers (all)</td><td>Opens buffer picker including hidden and <code>nofile</code> buffers.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fc</code></td><td><code>n</code></td><td>Find Config File</td><td>Opens file picker scoped to your Neovim config directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ff</code></td><td><code>n</code></td><td>Find Files (Root Dir)</td><td>Opens file picker scoped to the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fF</code></td><td><code>n</code></td><td>Find Files (cwd)</td><td>Opens file picker scoped to the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fg</code></td><td><code>n</code></td><td>Find Git Files</td><td>Opens Git-tracked files picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fp</code></td><td><code>n</code></td><td>Projects</td><td>Opens Snacks projects picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fr</code></td><td><code>n</code></td><td>Recent</td><td>Opens recent files scoped to the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fR</code></td><td><code>n</code></td><td>Recent (cwd)</td><td>Opens recent files scoped to the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fe</code></td><td><code>n</code></td><td>Explorer Snacks (root dir)</td><td>Opens Snacks explorer at the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fE</code></td><td><code>n</code></td><td>Explorer Snacks (cwd)</td><td>Opens Snacks explorer at the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;fs</code></td><td><code>n</code></td><td>Smart Find Files</td><td>Opens Snacks smart picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;h</code></td><td><code>n</code></td><td>Harpoon File</td><td>Adds the current file to Harpoon.</td></tr>
+                  <tr><td><code>&lt;leader&gt;1</code></td><td><code>n</code></td><td>Harpoon to File 1</td><td>Jumps to Harpoon slot 1.</td></tr>
+                  <tr><td><code>&lt;leader&gt;2</code></td><td><code>n</code></td><td>Harpoon to File 2</td><td>Jumps to Harpoon slot 2.</td></tr>
+                  <tr><td><code>&lt;leader&gt;3</code></td><td><code>n</code></td><td>Harpoon to File 3</td><td>Jumps to Harpoon slot 3.</td></tr>
+                  <tr><td><code>&lt;leader&gt;4</code></td><td><code>n</code></td><td>Harpoon to File 4</td><td>Jumps to Harpoon slot 4.</td></tr>
+                  <tr><td><code>&lt;C-e&gt;</code></td><td><code>n</code></td><td>Harpoon Quick Menu</td><td>Toggles the Harpoon quick menu.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="search">
+            <div class="section-header">
+              <h2>Search</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;/</code></td><td><code>n</code></td><td>Grep (Root Dir)</td><td>Opens Snacks grep picker scoped to the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sr</code></td><td><code>n</code>, <code>x</code></td><td>Search and Replace</td><td>Opens Grug Far, prefiltered to the current file extension when possible.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sB</code></td><td><code>n</code></td><td>Grep Open Buffers</td><td>Greps only through open buffers.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sg</code></td><td><code>n</code></td><td>Grep (Root Dir)</td><td>Greps the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sG</code></td><td><code>n</code></td><td>Grep (cwd)</td><td>Greps the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sw</code></td><td><code>n</code>, <code>x</code></td><td>Visual selection or word (Root Dir)</td><td>Greps the word or selection in the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sW</code></td><td><code>n</code>, <code>x</code></td><td>Visual selection or word (cwd)</td><td>Greps the word or selection in the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;s"</code></td><td><code>n</code></td><td>Registers</td><td>Opens register picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;s/</code></td><td><code>n</code></td><td>Search History</td><td>Opens search history picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sa</code></td><td><code>n</code></td><td>Autocmds</td><td>Opens autocmd picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sb</code></td><td><code>n</code></td><td>Buffer Lines</td><td>Opens line picker for the current buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sc</code></td><td><code>n</code></td><td>Command History</td><td>Opens command history picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sC</code></td><td><code>n</code></td><td>Commands</td><td>Opens commands picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sd</code></td><td><code>n</code></td><td>Diagnostics</td><td>Opens diagnostics picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sD</code></td><td><code>n</code></td><td>Buffer Diagnostics</td><td>Opens diagnostics for the current buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sh</code></td><td><code>n</code></td><td>Help Pages</td><td>Opens help tags picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sH</code></td><td><code>n</code></td><td>Highlights</td><td>Opens highlight groups picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;si</code></td><td><code>n</code></td><td>Icons</td><td>Opens icon picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sj</code></td><td><code>n</code></td><td>Jumps</td><td>Opens jumplist picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sk</code></td><td><code>n</code></td><td>Keymaps</td><td>Opens keymaps picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sl</code></td><td><code>n</code></td><td>Location List</td><td>Opens location list picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sm</code></td><td><code>n</code></td><td>Marks</td><td>Opens marks picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sM</code></td><td><code>n</code></td><td>Man Pages</td><td>Opens man pages picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sp</code></td><td><code>n</code></td><td>Search for Plugin Spec</td><td>Opens picker for plugin specs.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sq</code></td><td><code>n</code></td><td>Quickfix List</td><td>Opens quickfix list picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sR</code></td><td><code>n</code></td><td>Resume</td><td>Resumes the last Snacks picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;su</code></td><td><code>n</code></td><td>Undo History</td><td>Opens undo history picker.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="windows">
+            <div class="section-header">
+              <h2>Windows</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;-</code></td><td><code>n</code></td><td>Split Window Below</td><td>Splits the current window horizontally.</td></tr>
+                  <tr><td><code>&lt;leader&gt;|</code></td><td><code>n</code></td><td>Split Window Right</td><td>Splits the current window vertically.</td></tr>
+                  <tr><td><code>&lt;leader&gt;wd</code></td><td><code>n</code></td><td>Delete Window</td><td>Closes the current window.</td></tr>
+                  <tr><td><code>&lt;C-h&gt;</code></td><td><code>n</code></td><td>&mdash;</td><td>Moves to the tmux pane / Neovim split on the left.</td></tr>
+                  <tr><td><code>&lt;C-j&gt;</code></td><td><code>n</code></td><td>&mdash;</td><td>Moves to the tmux pane / Neovim split below.</td></tr>
+                  <tr><td><code>&lt;C-k&gt;</code></td><td><code>n</code></td><td>&mdash;</td><td>Moves to the tmux pane / Neovim split above.</td></tr>
+                  <tr><td><code>&lt;C-l&gt;</code></td><td><code>n</code></td><td>&mdash;</td><td>Moves to the tmux pane / Neovim split on the right.</td></tr>
+                  <tr><td><code>&lt;C-\&gt;</code></td><td><code>n</code></td><td>&mdash;</td><td>Jumps to the previous tmux pane.</td></tr>
+                  <tr><td><code>&lt;C-w&gt;&lt;space&gt;</code></td><td><code>n</code></td><td>Window Hydra Mode (which-key)</td><td>Opens which-key for window commands and keeps it active.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="tabs">
+            <div class="section-header">
+              <h2>Tabs</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;l</code></td><td><code>n</code></td><td>Last Tab</td><td>Jumps to the last tab.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;o</code></td><td><code>n</code></td><td>Close Other Tabs</td><td>Closes every tab except the current one.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;f</code></td><td><code>n</code></td><td>First Tab</td><td>Jumps to the first tab.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;&lt;tab&gt;</code></td><td><code>n</code></td><td>New Tab</td><td>Creates a new tab.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;]</code></td><td><code>n</code></td><td>Next Tab</td><td>Jumps to the next tab.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;d</code></td><td><code>n</code></td><td>Close Tab</td><td>Closes the current tab.</td></tr>
+                  <tr><td><code>&lt;leader&gt;&lt;tab&gt;[</code></td><td><code>n</code></td><td>Previous Tab</td><td>Jumps to the previous tab.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="buffers">
+            <div class="section-header">
+              <h2>Buffers</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;S-h&gt;</code></td><td><code>n</code></td><td>Prev Buffer</td><td>Switches to the previous buffer.</td></tr>
+                  <tr><td><code>&lt;S-l&gt;</code></td><td><code>n</code></td><td>Next Buffer</td><td>Switches to the next buffer.</td></tr>
+                  <tr><td><code>[b</code></td><td><code>n</code></td><td>Prev Buffer</td><td>Switches to the previous buffer.</td></tr>
+                  <tr><td><code>]b</code></td><td><code>n</code></td><td>Next Buffer</td><td>Switches to the next buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;bb</code></td><td><code>n</code></td><td>Switch to Other Buffer</td><td>Switches to the alternate buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;`</code></td><td><code>n</code></td><td>Switch to Other Buffer</td><td>Switches to the alternate buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;bd</code></td><td><code>n</code></td><td>Delete Buffer</td><td>Deletes the current buffer using Snacks.</td></tr>
+                  <tr><td><code>&lt;leader&gt;bo</code></td><td><code>n</code></td><td>Delete Other Buffers</td><td>Deletes all other buffers.</td></tr>
+                  <tr><td><code>&lt;leader&gt;bi</code></td><td><code>n</code></td><td>Delete Invisible Buffers</td><td>Deletes buffers not visible in any window.</td></tr>
+                  <tr><td><code>&lt;leader&gt;bD</code></td><td><code>n</code></td><td>Delete Buffer and Window</td><td>Runs <code>:bd</code> on the current buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;?</code></td><td><code>n</code></td><td>Buffer Keymaps (which-key)</td><td>Shows buffer-local keymaps in which-key.</td></tr>
+                  <tr><td><code>&lt;leader&gt;.</code></td><td><code>n</code></td><td>Toggle Scratch Buffer</td><td>Opens or hides the Snacks scratch buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;S</code></td><td><code>n</code></td><td>Select Scratch Buffer</td><td>Opens the Snacks scratch buffer picker.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="git">
+            <div class="section-header">
+              <h2>Git</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;gb</code></td><td><code>n</code></td><td>Git Branches</td><td>Opens branch picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gl</code></td><td><code>n</code></td><td>Git Log</td><td>Opens Git log picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gL</code></td><td><code>n</code></td><td>Git Log Line</td><td>Opens Git log for the current line.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gs</code></td><td><code>n</code></td><td>Git Status</td><td>Opens Git status picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gS</code></td><td><code>n</code></td><td>Git Stash</td><td>Opens Git stash picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gd</code></td><td><code>n</code></td><td>Git Diff (Hunks)</td><td>Opens diff hunks picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gD</code></td><td><code>n</code></td><td>Git Diff (origin)</td><td>Opens diff against <code>origin</code>.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gf</code></td><td><code>n</code></td><td>Git Log File</td><td>Opens file history picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gB</code></td><td><code>n</code>, <code>v</code></td><td>Git Browse (open)</td><td>Opens the current file or selection in the remote Git host.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gY</code></td><td><code>n</code>, <code>x</code></td><td>Git Browse (copy)</td><td>Copies the remote Git URL for the current file or selection.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gg</code></td><td><code>n</code></td><td>Lazygit (Root Dir)</td><td>Opens Lazygit at the project root when <code>lazygit</code> is installed.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gG</code></td><td><code>n</code></td><td>Lazygit (cwd)</td><td>Opens Lazygit in the current working directory when <code>lazygit</code> is installed.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="git-hunks">
+            <div class="section-header">
+              <h2>Git Hunks (buffer-local, Gitsigns)</h2>
+              <p>These mappings are active only in buffers where Gitsigns is attached.</p>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>]c</code></td><td><code>n</code></td><td>Jump to next git change</td><td>Jumps to the next hunk, or uses diff navigation in diff mode.</td></tr>
+                  <tr><td><code>[c</code></td><td><code>n</code></td><td>Jump to previous git change</td><td>Jumps to the previous hunk, or uses diff navigation in diff mode.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hs</code></td><td><code>n</code>, <code>v</code></td><td>git stage hunk</td><td>Stages the current hunk or selected hunk range.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hr</code></td><td><code>n</code>, <code>v</code></td><td>git reset hunk</td><td>Resets the current hunk or selected hunk range.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hS</code></td><td><code>n</code></td><td>git Stage buffer</td><td>Stages the whole buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hR</code></td><td><code>n</code></td><td>git Reset buffer</td><td>Resets the whole buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hp</code></td><td><code>n</code></td><td>git preview hunk</td><td>Previews the current hunk.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hi</code></td><td><code>n</code></td><td>git preview hunk inline</td><td>Shows an inline preview of the current hunk.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hb</code></td><td><code>n</code></td><td>git blame line</td><td>Shows full blame for the current line.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hd</code></td><td><code>n</code></td><td>git diff against index</td><td>Diffs the buffer against the index.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hD</code></td><td><code>n</code></td><td>git Diff against last commit</td><td>Diffs the buffer against the previous commit.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hQ</code></td><td><code>n</code></td><td>git hunk Quickfix list (all files in repo)</td><td>Sends all repo hunks to the quickfix list.</td></tr>
+                  <tr><td><code>&lt;leader&gt;hq</code></td><td><code>n</code></td><td>git hunk quickfix list (all changes in this file)</td><td>Sends current-file hunks to the quickfix list.</td></tr>
+                  <tr><td><code>&lt;leader&gt;tb</code></td><td><code>n</code></td><td>Toggle git show blame line</td><td>Toggles inline blame for the current line.</td></tr>
+                  <tr><td><code>&lt;leader&gt;tw</code></td><td><code>n</code></td><td>Toggle git intra-line word diff</td><td>Toggles word diff highlighting.</td></tr>
+                  <tr><td><code>ih</code></td><td><code>o</code>, <code>x</code></td><td>&mdash;</td><td>Selects the current git hunk as a text object.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="code-lsp-formatting">
+            <div class="section-header">
+              <h2>Code / LSP / Formatting</h2>
+            </div>
+            <div class="section-body">
+              <div class="subsection">
+                <h3>LSP actions</h3>
+                <p>These mappings are buffer-local and become active when an LSP attaches to the buffer.</p>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Description</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>&lt;leader&gt;cm</code></td><td><code>n</code></td><td>Mason</td><td>Opens Mason.</td></tr>
+                      <tr><td><code>&lt;leader&gt;cl</code></td><td><code>n</code></td><td>LSP: Lsp Info</td><td>Opens <code>:LspInfo</code>.</td></tr>
+                      <tr><td><code>grn</code></td><td><code>n</code></td><td>LSP: Rename</td><td>Renames the symbol under cursor.</td></tr>
+                      <tr><td><code>&lt;leader&gt;cr</code></td><td><code>n</code></td><td>LSP: Code Rename</td><td>Renames the symbol under cursor.</td></tr>
+                      <tr><td><code>gra</code></td><td><code>n</code>, <code>x</code></td><td>LSP: Goto Code Action</td><td>Opens code actions for the current context.</td></tr>
+                      <tr><td><code>&lt;leader&gt;ca</code></td><td><code>n</code>, <code>x</code></td><td>LSP: Code Action</td><td>Opens code actions for the current context.</td></tr>
+                      <tr><td><code>&lt;leader&gt;cA</code></td><td><code>n</code></td><td>LSP: Code Source Action</td><td>Applies source-level code actions.</td></tr>
+                      <tr><td><code>&lt;leader&gt;co</code></td><td><code>n</code></td><td>LSP: Code Organize Imports</td><td>Runs organize imports via LSP code action.</td></tr>
+                      <tr><td><code>gd</code></td><td><code>n</code></td><td>LSP: Goto Definition</td><td>Jumps directly to the definition.</td></tr>
+                      <tr><td><code>gD</code></td><td><code>n</code></td><td>LSP: Goto Declaration</td><td>Jumps directly to the declaration.</td></tr>
+                      <tr><td><code>grD</code></td><td><code>n</code></td><td>LSP: Goto Declaration</td><td>Alternate declaration mapping.</td></tr>
+                      <tr><td><code>K</code></td><td><code>n</code></td><td>LSP: Hover</td><td>Shows hover documentation.</td></tr>
+                      <tr><td><code>gK</code></td><td><code>n</code></td><td>LSP: Signature Help</td><td>Shows signature help.</td></tr>
+                      <tr><td><code>&lt;leader&gt;th</code></td><td><code>n</code></td><td>LSP: Toggle Inlay Hints</td><td>Toggles inlay hints when supported by the active LSP.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h3>LSP navigation with Snacks</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Description</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>gr</code></td><td><code>n</code></td><td>References</td><td>Opens LSP references in a picker.</td></tr>
+                      <tr><td><code>gI</code></td><td><code>n</code></td><td>Goto Implementation</td><td>Opens implementations in a picker.</td></tr>
+                      <tr><td><code>gy</code></td><td><code>n</code></td><td>Goto Type Definition</td><td>Opens type definitions in a picker.</td></tr>
+                      <tr><td><code>gai</code></td><td><code>n</code></td><td>Calls Incoming</td><td>Opens incoming calls in a picker.</td></tr>
+                      <tr><td><code>gao</code></td><td><code>n</code></td><td>Calls Outgoing</td><td>Opens outgoing calls in a picker.</td></tr>
+                      <tr><td><code>&lt;leader&gt;ss</code></td><td><code>n</code></td><td>LSP Symbols</td><td>Opens document symbols picker.</td></tr>
+                      <tr><td><code>&lt;leader&gt;sS</code></td><td><code>n</code></td><td>LSP Workspace Symbols</td><td>Opens workspace symbols picker.</td></tr>
+                      <tr><td><code>]]</code></td><td><code>n</code>, <code>t</code></td><td>Next Reference</td><td>Jumps to the next reference via Snacks words.</td></tr>
+                      <tr><td><code>[[</code></td><td><code>n</code>, <code>t</code></td><td>Prev Reference</td><td>Jumps to the previous reference via Snacks words.</td></tr>
+                      <tr><td><code>&lt;leader&gt;cR</code></td><td><code>n</code></td><td>Rename File</td><td>Renames the current file and updates references when supported.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h3>Formatting</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Description</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>&lt;leader&gt;cf</code></td><td><code>n</code>, <code>v</code></td><td>Code Format</td><td>Formats the current buffer or selection using Conform.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="ui-toggles-notifications">
+            <div class="section-header">
+              <h2>UI / Toggles / Notifications</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;us</code></td><td><code>n</code></td><td>Spelling</td><td>Toggles <code>spell</code>.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uw</code></td><td><code>n</code></td><td>Wrap</td><td>Toggles <code>wrap</code>.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uL</code></td><td><code>n</code></td><td>Relative Number</td><td>Toggles <code>relativenumber</code>.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ud</code></td><td><code>n</code></td><td>Diagnostics</td><td>Toggles diagnostics display.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ul</code></td><td><code>n</code></td><td>Line Number</td><td>Toggles line numbers.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uc</code></td><td><code>n</code></td><td>Conceallevel</td><td>Toggles conceal level.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uT</code></td><td><code>n</code></td><td>Treesitter</td><td>Toggles Treesitter highlighting.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ub</code></td><td><code>n</code></td><td>Dark Background</td><td>Toggles background between light and dark.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uh</code></td><td><code>n</code></td><td>Inlay Hints</td><td>Toggles Snacks inlay hints helper.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ug</code></td><td><code>n</code></td><td>Indent</td><td>Toggles Snacks indent guides.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uD</code></td><td><code>n</code></td><td>Dim</td><td>Toggles dimming.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uz</code></td><td><code>n</code></td><td>Toggle Zen Mode</td><td>Toggles Zen mode.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uZ</code></td><td><code>n</code></td><td>Toggle Zoom</td><td>Toggles zoomed Zen window.</td></tr>
+                  <tr><td><code>&lt;leader&gt;uC</code></td><td><code>n</code></td><td>Colorschemes</td><td>Opens colorscheme picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;n</code></td><td><code>n</code></td><td>Notification History</td><td>Opens notifications picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;un</code></td><td><code>n</code></td><td>Dismiss All Notifications</td><td>Hides all current notifications.</td></tr>
+                  <tr><td><code>&lt;C-/&gt;</code></td><td><code>n</code></td><td>Toggle Terminal</td><td>Opens or hides the Snacks terminal.</td></tr>
+                  <tr><td><code>&lt;C-_&gt;</code></td><td><code>n</code></td><td>which_key_ignore</td><td>Alternate terminal toggle keycode for terminals that send <code>&lt;C-_&gt;</code>.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="sessions">
+            <div class="section-header">
+              <h2>Sessions</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;qs</code></td><td><code>n</code></td><td>Restore Session</td><td>Restores the current session.</td></tr>
+                  <tr><td><code>&lt;leader&gt;qS</code></td><td><code>n</code></td><td>Select Session</td><td>Opens the session picker.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ql</code></td><td><code>n</code></td><td>Restore Last Session</td><td>Restores the last session.</td></tr>
+                  <tr><td><code>&lt;leader&gt;qd</code></td><td><code>n</code></td><td>Don't Save Current Session</td><td>Stops session saving for the current session.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="debug">
+            <div class="section-header">
+              <h2>Debug</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;F5&gt;</code></td><td><code>n</code></td><td>Debug: Start/Continue</td><td>Starts or continues the debugger.</td></tr>
+                  <tr><td><code>&lt;F1&gt;</code></td><td><code>n</code></td><td>Debug: Step Into</td><td>Steps into the current function call.</td></tr>
+                  <tr><td><code>&lt;F2&gt;</code></td><td><code>n</code></td><td>Debug: Step Over</td><td>Steps over the current line.</td></tr>
+                  <tr><td><code>&lt;F3&gt;</code></td><td><code>n</code></td><td>Debug: Step Out</td><td>Steps out of the current function.</td></tr>
+                  <tr><td><code>&lt;leader&gt;db</code></td><td><code>n</code></td><td>Debug: Toggle Breakpoint</td><td>Toggles a breakpoint on the current line.</td></tr>
+                  <tr><td><code>&lt;leader&gt;dB</code></td><td><code>n</code></td><td>Debug: Set Breakpoint</td><td>Sets a conditional breakpoint.</td></tr>
+                  <tr><td><code>&lt;F7&gt;</code></td><td><code>n</code></td><td>Debug: See last session result.</td><td>Toggles the DAP UI.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="motion-jump-plugins">
+            <div class="section-header">
+              <h2>Motion / Jump plugins</h2>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>s</code></td><td><code>n</code>, <code>x</code>, <code>o</code></td><td>Flash</td><td>Jumps to visible matches using Flash labels.</td></tr>
+                  <tr><td><code>S</code></td><td><code>n</code>, <code>o</code>, <code>x</code></td><td>Flash Treesitter</td><td>Jumps using Treesitter nodes.</td></tr>
+                  <tr><td><code>r</code></td><td><code>o</code></td><td>Remote Flash</td><td>Uses Flash remote action in operator-pending mode.</td></tr>
+                  <tr><td><code>R</code></td><td><code>o</code>, <code>x</code></td><td>Treesitter Search</td><td>Searches Treesitter nodes via Flash.</td></tr>
+                  <tr><td><code>&lt;C-s&gt;</code></td><td><code>c</code></td><td>Toggle Flash Search</td><td>Toggles Flash integration in command-line search.</td></tr>
+                  <tr><td><code>&lt;C-Space&gt;</code></td><td><code>n</code>, <code>o</code>, <code>x</code></td><td>Treesitter Incremental Selection</td><td>Starts or advances Treesitter selection through Flash.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="context-specific">
+            <div class="section-header">
+              <h2>Context-specific / plugin-local mappings</h2>
+              <p>These mappings only exist inside a specific plugin buffer or UI.</p>
+            </div>
+            <div class="section-body">
+              <div class="subsection">
+                <h3>Snacks picker and explorer</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Context</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>&lt;Esc&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input/list and explorer list</td><td>Cancels and closes the picker.</td></tr>
+                      <tr><td><code>&lt;C-o&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input/list and explorer list</td><td>Picks a target window and opens the selected item there.</td></tr>
+                      <tr><td><code>&lt;C-e&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input/list</td><td>Opens the selected item in a vertical split.</td></tr>
+                      <tr><td><code>&lt;A-t&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input</td><td>Toggles the custom “Ruby only” grep filter.</td></tr>
+                      <tr><td><code>&lt;A-n&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input</td><td>Toggles the custom “hide tests” grep filter.</td></tr>
+                      <tr><td><code>&lt;S-Y&gt;</code></td><td><code>n</code></td><td>Snacks explorer list</td><td>Copies the selected file path to the clipboard.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h3>Harpoon quick menu</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Context</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>&lt;C-v&gt;</code></td><td><code>n</code></td><td>Harpoon quick menu buffer</td><td>Opens the selected Harpoon entry in a vertical split.</td></tr>
+                      <tr><td><code>&lt;C-x&gt;</code></td><td><code>n</code></td><td>Harpoon quick menu buffer</td><td>Opens the selected Harpoon entry in a horizontal split.</td></tr>
+                      <tr><td><code>&lt;C-t&gt;</code></td><td><code>n</code></td><td>Harpoon quick menu buffer</td><td>Opens the selected Harpoon entry in a new tab.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h3>Neo-tree</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Context</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>\</code></td><td><code>n</code></td><td>Neo-tree filesystem window</td><td>Closes the Neo-tree window.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h3>Quick-close helper</h3>
+                <div class="callout">
+                  The following mapping is created automatically for these filetypes:
+                  <code>PlenaryTestPopup</code>, <code>checkhealth</code>, <code>dap-float</code>,
+                  <code>dbout</code>, <code>gitsigns-blame</code>, <code>grug-far</code>, <code>help</code>,
+                  <code>lspinfo</code>, <code>neotest-output</code>, <code>neotest-output-panel</code>,
+                  <code>neotest-summary</code>, <code>notify</code>, <code>qf</code>, <code>spectre_panel</code>,
+                  <code>startuptime</code>, <code>tsplayground</code>.
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Keymap</th>
+                        <th>Mode(s)</th>
+                        <th>Context</th>
+                        <th>What it does</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>q</code></td><td><code>n</code></td><td>Special utility buffers listed above</td><td>Closes the window and deletes the temporary buffer.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>Sources</h2>
+            <p>This HTML page mirrors the generated Markdown reference and is meant to be a convenient browsable version of it.</p>
+            <ul class="sources">
+              <li><code>KEYMAPS.md</code></li>
+              <li><code>lua/keymaps.lua</code></li>
+              <li><code>lua/autocmds.lua</code></li>
+              <li><code>lua/azeveco/plugins/*.lua</code></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

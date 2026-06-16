@@ -16,9 +16,21 @@ return {
         },
     },
     keys = {
-        { "<leader>ff", "<cmd>Telescope find_files<cr>", mode = "n", desc = "Find Files" },
-        { "<leader>fg", "<cmd>Telescope live_grep<cr>", mode = "n", desc = "Live Grep" },
-        { "<leader>fb", "<cmd>Telescope buffers<cr>", mode = "n", desc = "Buffers" },
-        { "<leader>fh", "<cmd>Telescope help_tags<cr>", mode = "n", desc = "Telescope Help Tags" },
+        { "<leader>ff", ":Telescope find_files<cr>", mode = "n", desc = "Find Files" },
+        { "<leader>fg", ":Telescope live_grep<cr>", mode = "n", desc = "Live Grep" },
+        { "<leader>fb", ":Telescope buffers<cr>", mode = "n", desc = "Buffers" },
+        { "<leader>fh", ":Telescope help_tags<cr>", mode = "n", desc = "Telescope Help Tags" },
+        { "<leader>fk", ":Telescope keymaps<cr>", mode = "n", desc = "Keymaps" },
+        { "<leader>fw", ":Telescope grep_string<cr>", mode = {"n", "v"}, desc = "Word" },
+        -- {
+        --   "<leader>fc",
+        --   function()
+        --     require("telescope.builtin").colorscheme({ 
+        --       enable_preview = true,    -- Forces live preview as you cycle
+        --       ignore_builtins = false,   -- Optional: Hides default vim themes like 'desert/elflord'
+        --     })
+        --   end,
+        --   desc = "Find Colorscheme (with Preview)",
+        -- },
     }
 }
