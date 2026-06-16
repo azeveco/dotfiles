@@ -12,7 +12,6 @@ nvim/lazy-lock.json
 tags
 test.sh
 .luarc.json
-nvim
 
 spell/
 
