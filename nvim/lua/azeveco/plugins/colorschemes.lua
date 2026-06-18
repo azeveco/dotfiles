@@ -40,6 +40,22 @@ vim.pack.add({
 ---@diagnostic disable-next-line: missing-fields
 require("gruvbox").setup({})
 
+vim.pack.add({
+  {
+    src = "https://github.com/Shatur/neovim-ayu",
+  },
+})
+---@diagnostic disable-next-line: missing-fields
+require("ayu").setup({})
+
+vim.pack.add({
+  {
+    src = "https://github.com/embark-theme/vim",
+    name = "embark",
+  },
+})
+vim.g.embark_terminal_italics = 1
+
 -- Load the colorscheme here.
 -- Like many other themes, this one has different styles, and you could load
 -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
