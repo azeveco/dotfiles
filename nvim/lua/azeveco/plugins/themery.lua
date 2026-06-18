@@ -8,6 +8,7 @@ require('themery').setup {
     'kanagawa-wave',
     'rose-pine-moon',
     'rose-pine-main',
+    'ayu-dark',
     'default',
   },
 }
