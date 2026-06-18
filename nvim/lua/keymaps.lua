@@ -32,6 +32,10 @@ vim.keymap.set({ "n", "v" }, "<leader>_", "\"_d", { desc = "Delete Without Yanki
 -- Search and replace the word under cursor, ready for interactive editing.
 vim.keymap.set({ "n", "v" }, "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Search & Replace" })
 
+-- Better indenting
+vim.keymap.set("x", "<", "<gv")
+vim.keymap.set("x", ">", ">gv")
+
 -- Diagnostics / Quickfix
 -- These mappings configure diagnostics and make it easier to jump through issues,
 -- inspect messages, and send them to the location list.
