@@ -1,6 +1,7 @@
 -- Load plugin modules in order.
 
 require 'azeveco.plugins.mini'
+-- require 'azeveco.plugins.alpha-nvim'
 require 'azeveco.plugins.snacks'
 require 'azeveco.plugins.guess-indent'
 require 'azeveco.plugins.gitsigns'
