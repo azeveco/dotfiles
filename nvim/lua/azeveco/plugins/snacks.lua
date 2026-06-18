@@ -10,7 +10,7 @@ vim.pack.add{ gh "folke/snacks.nvim" }
 -- 2. Initialize the plugin with your merged configuration
 require("snacks").setup({
     bigfile = { enabled = true },
-    explorer = { enabled = true },
+    explorer = { enabled = true, replace_netrw = false },
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
@@ -32,20 +32,33 @@ require("snacks").setup({
     dashboard = {
         enabled = true,
         preset = {
-            header = [[
-       ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-       ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-       ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-       ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-       ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-       ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝    ╚═╝
-       Hi! You can call me Gabs :D]],
+   --        header = [[
+   --                                                                     
+   --       ████ ██████           █████      ██                     
+   --      ███████████             █████                             
+   --      █████████ ███████████████████ ███   ███████████   
+   --     █████████  ███    █████████████ █████ ██████████████   
+   --    █████████ ██████████ █████████ █████ █████ ████ █████   
+   --  ███████████ ███    ███ █████████ █████ █████ ████ █████  
+   -- ██████  █████████████████████ ████ █████ █████ ████ ██████ 
+   --            ]],
+        header = [[
+                                                                   
+      ████ ██████           █████      ██                 btw
+     ███████████             █████                            
+     █████████ ███████████████████ ███   ███████████  
+    █████████  ███    █████████████ █████ ██████████████  
+   █████████ ██████████ █████████ █████ █████ ████ █████  
+ ███████████ ███    ███ █████████ █████ █████ ████ █████ 
+██████  █████████████████████ ████ █████ █████ ████ ██████
+        ]],
         },
         sections = {
             { section = "header" },
-            { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-            { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-            { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+            -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+            { section = "keys", indent = 2, padding = 1, gap = 1 },
+            -- { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+            -- { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         },
     },
 
@@ -288,3 +301,4 @@ if vim.fn.executable("lazygit") == 1 then
     require("snacks").lazygit()
   end, { desc = "Lazygit (cwd)" })
 end
+
