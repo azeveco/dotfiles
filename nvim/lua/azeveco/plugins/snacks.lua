@@ -1,6 +1,7 @@
 local function gh(repo) return 'https://github.com/' .. repo end
 local workspace = require 'azeveco.workspace'
 
+-- Setup workspace
 workspace.setup()
 
 -- 1. Load the plugin natively
@@ -225,6 +226,7 @@ vim.keymap.set({ "n", "v" }, "<leader>gB", function() require("snacks").gitbrows
 vim.keymap.set({ "n", "x" }, "<leader>gY", function()
   require("snacks").gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false })
 end, { desc = "Git Browse (copy)" })
+vim.keymap.set("n", "<leader>gv", ":G<CR>", { desc = "Git" })
 
 -- Search
 -- Search helpers cover text, commands, diagnostics, and navigation history.
