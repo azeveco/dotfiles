@@ -46,7 +46,12 @@ vim.pack.add({
   },
 })
 ---@diagnostic disable-next-line: missing-fields
-require("ayu").setup({})
+require("ayu").setup({
+  overrides = {
+      SnacksDashboardDir = { link = "Normal" },
+      SnacksDashboardFile = { link = "Special" },
+  },
+})
 
 vim.pack.add({
   {
@@ -58,7 +63,7 @@ vim.g.embark_terminal_italics = 1
 
 -- Load the colorscheme here.
 -- Like many other themes, this one has different styles, and you could load
--- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+-- any other, such as '', 'tokyonight-moon', or 'tokyonight-day'.
 -- vim.cmd.colorscheme 'kanagawa-wave'
 
 -- vim: ts=2 sts=2 sw=2 et
