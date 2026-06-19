@@ -9,7 +9,10 @@ local function gh(repo) return 'https://github.com/' .. repo end
 ---@type (string|vim.pack.Spec)[]
 local harpoon_plugins = {
     gh 'nvim-lua/plenary.nvim',
-    gh 'ThePrimeagen/harpoon'
+    -- This config uses the harpoon2 API (harpoon:setup, harpoon.extensions,
+    -- harpoon:list, harpoon.ui), which only lives on the 'harpoon2' branch.
+    -- Pin it so vim.pack tracks that branch instead of master (harpoon1).
+    { src = gh 'ThePrimeagen/harpoon', version = 'harpoon2' }
 }
 
 -- NOTE: You can install multiple plugins at once
