@@ -1,8 +1,7 @@
 local function gh(repo) return 'https://github.com/' .. repo end
+local workspace = require 'azeveco.workspace'
 
-local function project_root()
-  return vim.fs.root(0, ".git") or vim.fn.getcwd()
-end
+workspace.setup()
 
 -- 1. Load the plugin natively
 vim.pack.add{ gh "folke/snacks.nvim" }
@@ -10,6 +9,7 @@ vim.pack.add{ gh "folke/snacks.nvim" }
 -- 2. Initialize the plugin with your merged configuration
 require("snacks").setup({
     bigfile = { enabled = true },
+    -- netrw is disabled in options.lua, so let Snacks handle `nvim <dir>`.
     explorer = { enabled = true, replace_netrw = false },
     indent = { enabled = true },
     input = { enabled = true },
@@ -57,8 +57,8 @@ require("snacks").setup({
             { section = "header" },
             -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
             { section = "keys", indent = 2, padding = 1, gap = 1 },
-            -- { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-            -- { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+            { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+            { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         },
     },
 
@@ -189,11 +189,11 @@ require("snacks").toggle.dim():map("<leader>uD")
 
 -- File / Find
 -- These are the main entry points for exploring files, buffers, and project roots.
-vim.keymap.set("n", "<leader><space>", function() require("snacks").picker.files({ cwd = project_root() }) end, { desc = "Find Files (Root Dir)" })
+vim.keymap.set("n", "<leader><space>", function() require("snacks").picker.files({ cwd = workspace() }) end, { desc = "Find Files (Root Dir)" })
 vim.keymap.set("n", "<leader>,", function() require("snacks").picker.buffers() end, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>/", function() require("snacks").picker.grep({ cwd = project_root() }) end, { desc = "Grep (Root Dir)" })
+vim.keymap.set("n", "<leader>/", function() require("snacks").picker.grep({ cwd = workspace() }) end, { desc = "Grep (Root Dir)" })
 vim.keymap.set("n", "<leader>:", function() require("snacks").picker.command_history() end, { desc = "Command History" })
-vim.keymap.set("n", "<leader>e", function() require("snacks").explorer({ cwd = project_root() }) end, { desc = "Explorer Snacks (root dir)" })
+vim.keymap.set("n", "<leader>e", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer Snacks (root dir)" })
 vim.keymap.set("n", "<leader>E", function() require("snacks").explorer() end, { desc = "Explorer Snacks (cwd)" })
 
 -- File / Find
@@ -201,13 +201,13 @@ vim.keymap.set("n", "<leader>E", function() require("snacks").explorer() end, { 
 vim.keymap.set("n", "<leader>fb", function() require("snacks").picker.buffers() end, { desc = "Buffers" })
 vim.keymap.set("n", "<leader>fB", function() require("snacks").picker.buffers({ hidden = true, nofile = true }) end, { desc = "Buffers (all)" })
 vim.keymap.set("n", "<leader>fc", function() require("snacks").picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "Find Config File" })
-vim.keymap.set("n", "<leader>ff", function() require("snacks").picker.files({ cwd = project_root() }) end, { desc = "Find Files (Root Dir)" })
+vim.keymap.set("n", "<leader>ff", function() require("snacks").picker.files({ cwd = workspace() }) end, { desc = "Find Files (Root Dir)" })
 vim.keymap.set("n", "<leader>fF", function() require("snacks").picker.files({ cwd = vim.fn.getcwd() }) end, { desc = "Find Files (cwd)" })
 vim.keymap.set("n", "<leader>fg", function() require("snacks").picker.git_files() end, { desc = "Find Git Files" })
 vim.keymap.set("n", "<leader>fp", function() require("snacks").picker.projects() end, { desc = "Projects" })
-vim.keymap.set("n", "<leader>fr", function() require("snacks").picker.recent({ cwd = project_root() }) end, { desc = "Recent" })
+vim.keymap.set("n", "<leader>fr", function() require("snacks").picker.recent({ cwd = workspace() }) end, { desc = "Recent" })
 vim.keymap.set("n", "<leader>fR", function() require("snacks").picker.recent({ filter = { cwd = true } }) end, { desc = "Recent (cwd)" })
-vim.keymap.set("n", "<leader>fe", function() require("snacks").explorer({ cwd = project_root() }) end, { desc = "Explorer Snacks (root dir)" })
+vim.keymap.set("n", "<leader>fe", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer Snacks (root dir)" })
 vim.keymap.set("n", "<leader>fE", function() require("snacks").explorer() end, { desc = "Explorer Snacks (cwd)" })
 vim.keymap.set("n", "<leader>fs", function() require("snacks").picker.smart() end, { desc = "Smart Find Files" })
 
@@ -229,9 +229,9 @@ end, { desc = "Git Browse (copy)" })
 -- Search
 -- Search helpers cover text, commands, diagnostics, and navigation history.
 vim.keymap.set("n", "<leader>sB", function() require("snacks").picker.grep_buffers() end, { desc = "Grep Open Buffers" })
-vim.keymap.set("n", "<leader>sg", function() require("snacks").picker.grep({ cwd = project_root() }) end, { desc = "Grep (Root Dir)" })
+vim.keymap.set("n", "<leader>sg", function() require("snacks").picker.grep({ cwd = workspace() }) end, { desc = "Grep (Root Dir)" })
 vim.keymap.set("n", "<leader>sG", function() require("snacks").picker.grep({ cwd = vim.fn.getcwd() }) end, { desc = "Grep (cwd)" })
-vim.keymap.set({ "n", "x" }, "<leader>sw", function() require("snacks").picker.grep_word({ cwd = project_root() }) end, { desc = "Visual selection or word (Root Dir)" })
+vim.keymap.set({ "n", "x" }, "<leader>sw", function() require("snacks").picker.grep_word({ cwd = workspace() }) end, { desc = "Visual selection or word (Root Dir)" })
 vim.keymap.set({ "n", "x" }, "<leader>sW", function() require("snacks").picker.grep_word({ cwd = vim.fn.getcwd() }) end, { desc = "Visual selection or word (cwd)" })
 vim.keymap.set("n", '<leader>s"', function() require("snacks").picker.registers() end, { desc = "Registers" })
 vim.keymap.set("n", '<leader>s/', function() require("snacks").picker.search_history() end, { desc = "Search History" })
@@ -293,12 +293,10 @@ vim.keymap.set({ "n", "t" }, "[[", function() require("snacks").words.jump(-vim.
 if vim.fn.executable("lazygit") == 1 then
   vim.keymap.set("n", "<leader>gg", function()
     -- Natively find the git root, fallback to current working directory if not found
-    local git_root = vim.fs.root(0, ".git") or vim.fn.getcwd()
-    require("snacks").lazygit({ cwd = git_root })
+    require("snacks").lazygit({ cwd = workspace.git() })
   end, { desc = "Lazygit (Root Dir)" })
 
   vim.keymap.set("n", "<leader>gG", function()
     require("snacks").lazygit()
   end, { desc = "Lazygit (cwd)" })
 end
-
