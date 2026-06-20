@@ -171,22 +171,22 @@ if vim.fn.has("nvim-0.11") == 1 then
         dd(...)
     end
 else
-    vim.print = _G.dd 
+    vim.print = _G.dd
 end
 
 -- UI
 -- These toggles control editor presentation and display-oriented helpers.
-require("snacks").toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+-- require("snacks").toggle.option("spell", { name = "Spelling" }):map("<leader>us")
 require("snacks").toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-require("snacks").toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+-- require("snacks").toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
 require("snacks").toggle.diagnostics():map("<leader>ud")
-require("snacks").toggle.line_number():map("<leader>ul")
+-- require("snacks").toggle.line_number():map("<leader>ul")
 require("snacks").toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uc")
 require("snacks").toggle.treesitter():map("<leader>uT")
-require("snacks").toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
-require("snacks").toggle.inlay_hints():map("<leader>uh")
+-- require("snacks").toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+-- require("snacks").toggle.inlay_hints():map("<leader>uh")
 require("snacks").toggle.indent():map("<leader>ug")
-require("snacks").toggle.dim():map("<leader>uD")
+-- require("snacks").toggle.dim():map("<leader>uD")
 
 -- File / Find
 -- These are the main entry points for exploring files, buffers, and project roots.
@@ -194,8 +194,8 @@ vim.keymap.set("n", "<leader><space>", function() require("snacks").picker.files
 vim.keymap.set("n", "<leader>,", function() require("snacks").picker.buffers() end, { desc = "Buffers" })
 vim.keymap.set("n", "<leader>/", function() require("snacks").picker.grep({ cwd = workspace() }) end, { desc = "Grep (Root Dir)" })
 vim.keymap.set("n", "<leader>:", function() require("snacks").picker.command_history() end, { desc = "Command History" })
-vim.keymap.set("n", "<leader>e", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer Snacks (root dir)" })
-vim.keymap.set("n", "<leader>E", function() require("snacks").explorer() end, { desc = "Explorer Snacks (cwd)" })
+vim.keymap.set("n", "<leader>e", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer (root dir)" })
+vim.keymap.set("n", "<leader>E", function() require("snacks").explorer() end, { desc = "Explorer (cwd)" })
 
 -- File / Find
 -- Dedicated `<leader>f` mappings keep file discovery and project switching together.
@@ -226,7 +226,18 @@ vim.keymap.set({ "n", "v" }, "<leader>gB", function() require("snacks").gitbrows
 vim.keymap.set({ "n", "x" }, "<leader>gY", function()
   require("snacks").gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false })
 end, { desc = "Git Browse (copy)" })
-vim.keymap.set("n", "<leader>gv", ":G<CR>", { desc = "Git" })
+vim.keymap.set("n", "<leader>gg", ":G<CR>", { desc = "Git" })
+-- Lazygit mappings stay with the rest of the git workflow helpers.
+if vim.fn.executable("lazygit") == 1 then
+    vim.keymap.set("n", "<leader>gv", function()
+        -- Natively find the git root, fallback to current working directory if not found
+        require("snacks").lazygit({ cwd = workspace.git() })
+    end, { desc = "Lazygit (Root Dir)" })
+
+    vim.keymap.set("n", "<leader>gV", function()
+        require("snacks").lazygit()
+    end, { desc = "Lazygit (cwd)" })
+end
 
 -- Search
 -- Search helpers cover text, commands, diagnostics, and navigation history.
@@ -237,21 +248,72 @@ vim.keymap.set({ "n", "x" }, "<leader>sw", function() require("snacks").picker.g
 vim.keymap.set({ "n", "x" }, "<leader>sW", function() require("snacks").picker.grep_word({ cwd = vim.fn.getcwd() }) end, { desc = "Visual selection or word (cwd)" })
 vim.keymap.set("n", '<leader>s"', function() require("snacks").picker.registers() end, { desc = "Registers" })
 vim.keymap.set("n", '<leader>s/', function() require("snacks").picker.search_history() end, { desc = "Search History" })
-vim.keymap.set("n", "<leader>sa", function() require("snacks").picker.autocmds() end, { desc = "Autocmds" })
-vim.keymap.set("n", "<leader>sb", function() require("snacks").picker.lines() end, { desc = "Buffer Lines" })
-vim.keymap.set("n", "<leader>sc", function() require("snacks").picker.command_history() end, { desc = "Command History" })
-vim.keymap.set("n", "<leader>sC", function() require("snacks").picker.commands() end, { desc = "Commands" })
+-- vim.keymap.set("n", "<leader>sa", function() require("snacks").picker.autocmds() end, { desc = "Autocmds" })
+-- vim.keymap.set("n", "<leader>sb", function() require("snacks").picker.lines() end, { desc = "Buffer Lines" })
+-- vim.keymap.set("n", "<leader>sc", function() require("snacks").picker.command_history() end, { desc = "Command History" })
+-- vim.keymap.set("n", "<leader>sC", function() require("snacks").picker.commands() end, { desc = "Commands" })
 vim.keymap.set("n", "<leader>sd", function() require("snacks").picker.diagnostics() end, { desc = "Diagnostics" })
 vim.keymap.set("n", "<leader>sD", function() require("snacks").picker.diagnostics_buffer() end, { desc = "Buffer Diagnostics" })
 vim.keymap.set("n", "<leader>sh", function() require("snacks").picker.help() end, { desc = "Help Pages" })
-vim.keymap.set("n", "<leader>sH", function() require("snacks").picker.highlights() end, { desc = "Highlights" })
-vim.keymap.set("n", "<leader>si", function() require("snacks").picker.icons() end, { desc = "Icons" })
-vim.keymap.set("n", "<leader>sj", function() require("snacks").picker.jumps() end, { desc = "Jumps" })
+-- vim.keymap.set("n", "<leader>sH", function() require("snacks").picker.highlights() end, { desc = "Highlights" })
+-- vim.keymap.set("n", "<leader>si", function() require("snacks").picker.icons() end, { desc = "Icons" })
+-- vim.keymap.set("n", "<leader>sj", function() require("snacks").picker.jumps() end, { desc = "Jumps" })
 vim.keymap.set("n", "<leader>sk", function() require("snacks").picker.keymaps() end, { desc = "Keymaps" })
 vim.keymap.set("n", "<leader>sl", function() require("snacks").picker.loclist() end, { desc = "Location List" })
 vim.keymap.set("n", "<leader>sm", function() require("snacks").picker.marks() end, { desc = "Marks" })
-vim.keymap.set("n", "<leader>sM", function() require("snacks").picker.man() end, { desc = "Man Pages" })
-vim.keymap.set("n", "<leader>sp", function() require("snacks").picker.lazy() end, { desc = "Search for Plugin Spec" })
+-- vim.keymap.set("n", "<leader>sM", function() require("snacks").picker.man() end, { desc = "Man Pages" })
+vim.keymap.set("n", "<leader>sp", function()
+  -- vim.pack equivalent of the lazy picker: list the plugins vim.pack actually
+  -- installed (deduplicated, no commented-out specs, no false positives like
+  -- scripts/split_init.py), no preview, and <CR> jumps to the file in
+  -- lua/azeveco/plugins/ where that plugin is declared.
+  local plugins_dir = vim.fs.joinpath(vim.fn.stdpath("config"), "lua", "azeveco", "plugins")
+  require("snacks").picker({
+    source = "plugins",
+    title = "Plugins",
+    preview = "none",
+    layout = { preset = "select" },
+    finder = function()
+      local items = {}
+      for _, p in ipairs(vim.pack.get()) do
+        items[#items + 1] = {
+          text = p.spec.name .. " " .. p.spec.src, -- searchable
+          name = p.spec.name,
+          src = p.spec.src,
+        }
+      end
+      table.sort(items, function(a, b) return a.name < b.name end)
+      return items
+    end,
+    format = function(item)
+      local repo = (item.src:gsub("^https://github%.com/", ""))
+      return {
+        { item.name, "SnacksPickerFile" },
+        { "  " },
+        { repo, "SnacksPickerComment" },
+      }
+    end,
+    confirm = function(picker, item)
+      picker:close()
+      if not item then return end
+      -- Find the config file that declares this plugin by its `owner/repo`,
+      -- skipping commented-out lines, and jump there.
+      local repo = (item.src:gsub("^https://github%.com/", ""))
+      for _, path in ipairs(vim.fn.globpath(plugins_dir, "**/*.lua", false, true)) do
+        local lnum = 0
+        for _, line in ipairs(vim.fn.readfile(path)) do
+          lnum = lnum + 1
+          if not line:match("^%s*%-%-") and line:find(repo, 1, true) then
+            vim.cmd.edit(path)
+            vim.api.nvim_win_set_cursor(0, { lnum, 0 })
+            return
+          end
+        end
+      end
+      require("snacks").notify.warn("No config file found for " .. item.name)
+    end,
+  })
+end, { desc = "Search for Plugin (vim.pack)" })
 vim.keymap.set("n", "<leader>sq", function() require("snacks").picker.qflist() end, { desc = "Quickfix List" })
 vim.keymap.set("n", "<leader>sR", function() require("snacks").picker.resume() end, { desc = "Resume" })
 vim.keymap.set("n", "<leader>su", function() require("snacks").picker.undo() end, { desc = "Undo History" })
@@ -260,7 +322,7 @@ vim.keymap.set("n", "<leader>su", function() require("snacks").picker.undo() end
 -- LSP-backed symbol navigation stays under the `g` and search-style symbol mappings.
 vim.keymap.set("n", "gr", function() require("snacks").picker.lsp_references() end, { nowait = true, desc = "References" })
 vim.keymap.set("n", "gI", function() require("snacks").picker.lsp_implementations() end, { desc = "Goto Implementation" })
-vim.keymap.set("n", "gy", function() require("snacks").picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition" })
+vim.keymap.set("n", "gy", function() require("snacks").picker.lsp_type_definitions() end, { desc = "Goto Type Definition" })
 vim.keymap.set("n", "gai", function() require("snacks").picker.lsp_incoming_calls() end, { desc = "Calls Incoming" })
 vim.keymap.set("n", "gao", function() require("snacks").picker.lsp_outgoing_calls() end, { desc = "Calls Outgoing" })
 vim.keymap.set("n", "<leader>ss", function() require("snacks").picker.lsp_symbols() end, { desc = "LSP Symbols" })
@@ -277,28 +339,15 @@ vim.keymap.set("n", "<leader>cR", function() require("snacks").rename.rename_fil
 
 -- UI
 -- UI helpers cover zen mode, notifications, colorschemes, and terminal access.
-vim.keymap.set("n", "<leader>uz", function() require("snacks").zen() end, { desc = "Toggle Zen Mode" })
+-- vim.keymap.set("n", "<leader>uz", function() require("snacks").zen() end, { desc = "Toggle Zen Mode" })
 vim.keymap.set("n", "<leader>uZ", function() require("snacks").zen.zoom() end, { desc = "Toggle Zoom" })
 vim.keymap.set("n", "<leader>uC", function() require("snacks").picker.colorschemes() end, { desc = "Colorschemes" })
 vim.keymap.set("n", "<leader>n", function() require("snacks").picker.notifications() end, { desc = "Notification History" })
 vim.keymap.set("n", "<leader>un", function() require("snacks").notifier.hide() end, { desc = "Dismiss All Notifications" })
-vim.keymap.set("n", "<c-/>", function() require("snacks").terminal() end, { desc = "Toggle Terminal" })
+-- vim.keymap.set("n", "<c-/>", function() require("snacks").terminal() end, { desc = "Toggle Terminal" }) -- No need for that as I use Tmux multiple panes
 vim.keymap.set("n", "<c-_>", function() require("snacks").terminal() end, { desc = "which_key_ignore" })
 
 -- Next / Prev
 -- Jump between repeated references surfaced by Snacks words.
 vim.keymap.set({ "n", "t" }, "]]", function() require("snacks").words.jump(vim.v.count1) end, { desc = "Next Reference" })
 vim.keymap.set({ "n", "t" }, "[[", function() require("snacks").words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
-
--- Git
--- Lazygit mappings stay with the rest of the git workflow helpers.
-if vim.fn.executable("lazygit") == 1 then
-  vim.keymap.set("n", "<leader>gg", function()
-    -- Natively find the git root, fallback to current working directory if not found
-    require("snacks").lazygit({ cwd = workspace.git() })
-  end, { desc = "Lazygit (Root Dir)" })
-
-  vim.keymap.set("n", "<leader>gG", function()
-    require("snacks").lazygit()
-  end, { desc = "Lazygit (cwd)" })
-end
