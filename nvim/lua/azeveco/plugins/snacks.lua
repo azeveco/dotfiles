@@ -114,8 +114,8 @@ require("snacks").setup({
                 win = {
                     list = {
                         keys = {
+                            -- ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } }, -- Commenting the override to keep <S-CR>
                             ["<Esc>"] = { "cancel", mode = { "n", "i" } },
-                            ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
                             ["<S-Y>"] = "copy_file_path",
                         },
                     },
@@ -139,8 +139,8 @@ require("snacks").setup({
         win = {
             input = {
                 keys = {
+                    -- ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } }, -- Commenting the override to keep <S-CR>
                     ["<Esc>"] = { "cancel", mode = { "n", "i" } },
-                    ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
                     ["<C-e>"] = { "edit_vsplit", mode = { "i", "n" } },
                     ["<a-t>"] = { "toggle_ruby", mode = { "i", "n" } },
                     ["<a-n>"] = { "hide_tests", mode = { "i", "n" } },
@@ -148,8 +148,8 @@ require("snacks").setup({
             },
             list = {
                 keys = {
+                    -- ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } }, -- Commenting the override to keep <S-CR>
                     ["<Esc>"] = { "cancel", mode = { "n", "i" } },
-                    ["<C-o>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
                     ["<C-e>"] = "edit_vsplit",
                 },
             },
