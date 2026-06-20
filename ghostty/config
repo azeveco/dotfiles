@@ -29,3 +29,6 @@ theme = "Ayu"
 
 # window-decoration = none
 macos-titlebar-style = hidden
+
+# Send Shift+Enter as a distinct escape sequence for apps that support it
+# keybind = shift+enter=text:\x1b[13;2u
