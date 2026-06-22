@@ -27,5 +27,7 @@ require 'azeveco.plugins.harpoon'
 require 'azeveco.plugins.persistence'
 require 'azeveco.plugins.vim-tmux-navigator'
 require 'azeveco.plugins.vim-fugitive'
+require 'azeveco.plugins.vim-endwise'
+require 'azeveco.plugins.obsidian-nvim'
 
 -- vim: ts=2 sts=2 sw=2 et

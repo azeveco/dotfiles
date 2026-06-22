@@ -33,6 +33,8 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
+vim.opt.conceallevel = 2
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
