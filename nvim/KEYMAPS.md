@@ -4,9 +4,9 @@ This file documents the active custom keymaps defined in:
 
 - `lua/keymaps.lua`
 - `lua/autocmds.lua`
-- `lua/azeveco/plugins/*.lua`
+- `lua/azeveco/plugins/*.lua` (only the plugins that are actually `require`d in `lua/plugins.lua`)
 
-It includes global mappings and context-specific plugin-local mappings. Commented-out mappings are not included.
+It includes global mappings and context-specific plugin-local mappings. Commented-out mappings, and mappings from plugins that are commented out in `lua/plugins.lua` (e.g. Telescope, Neo-tree, alpha-nvim), are not included.
 
 ## General
 
@@ -21,6 +21,8 @@ It includes global mappings and context-specific plugin-local mappings. Commente
 | `<A-k>` | `i` | Move Up | Moves the current line up while staying in insert mode. |
 | `<A-j>` | `v` | Move Down | Moves the selected lines down and reindents them. |
 | `<A-k>` | `v` | Move Up | Moves the selected lines up and reindents them. |
+| `<` | `x` | — | Indents the selection left and keeps it selected. |
+| `>` | `x` | — | Indents the selection right and keeps it selected. |
 | `<leader>p` | `x` | — | Pastes over a selection without overwriting the default register. |
 | `<leader>_` | `n`, `v` | Delete Without Yanking | Deletes text into the black-hole register. |
 | `<leader>r` | `n`, `v` | Search & Replace | Starts a project-wide substitute using the word under cursor. |
@@ -43,12 +45,10 @@ It includes global mappings and context-specific plugin-local mappings. Commente
 | Keymap | Mode(s) | Description | What it does |
 | --- | --- | --- | --- |
 | `<leader>fn` | `n` | New File | Opens a new empty buffer. |
-| `\` | `n` | NeoTree reveal | Reveals the current file in Neo-tree. |
 | `<leader><space>` | `n` | Find Files (Root Dir) | Opens Snacks file picker scoped to the project root. |
 | `<leader>,` | `n` | Buffers | Opens Snacks buffer picker. |
-| `<leader>:` | `n` | Command History | Opens Snacks command history picker. |
-| `<leader>e` | `n` | Explorer Snacks (root dir) | Opens Snacks explorer at the project root. |
-| `<leader>E` | `n` | Explorer Snacks (cwd) | Opens Snacks explorer at the current working directory. |
+| `<leader>e` | `n` | Explorer (root dir) | Opens Snacks explorer at the project root. |
+| `<leader>E` | `n` | Explorer (cwd) | Opens Snacks explorer at the current working directory. |
 | `<leader>fb` | `n` | Buffers | Opens Snacks buffer picker. |
 | `<leader>fB` | `n` | Buffers (all) | Opens buffer picker including hidden and `nofile` buffers. |
 | `<leader>fc` | `n` | Find Config File | Opens file picker scoped to your Neovim config directory. |
@@ -81,21 +81,14 @@ It includes global mappings and context-specific plugin-local mappings. Commente
 | `<leader>sW` | `n`, `x` | Visual selection or word (cwd) | Greps the word or selection in the current working directory. |
 | `<leader>s"` | `n` | Registers | Opens register picker. |
 | `<leader>s/` | `n` | Search History | Opens search history picker. |
-| `<leader>sa` | `n` | Autocmds | Opens autocmd picker. |
-| `<leader>sb` | `n` | Buffer Lines | Opens line picker for the current buffer. |
-| `<leader>sc` | `n` | Command History | Opens command history picker. |
-| `<leader>sC` | `n` | Commands | Opens commands picker. |
 | `<leader>sd` | `n` | Diagnostics | Opens diagnostics picker. |
 | `<leader>sD` | `n` | Buffer Diagnostics | Opens diagnostics for the current buffer. |
 | `<leader>sh` | `n` | Help Pages | Opens help tags picker. |
-| `<leader>sH` | `n` | Highlights | Opens highlight groups picker. |
 | `<leader>si` | `n` | Icons | Opens icon picker. |
-| `<leader>sj` | `n` | Jumps | Opens jumplist picker. |
 | `<leader>sk` | `n` | Keymaps | Opens keymaps picker. |
 | `<leader>sl` | `n` | Location List | Opens location list picker. |
 | `<leader>sm` | `n` | Marks | Opens marks picker. |
-| `<leader>sM` | `n` | Man Pages | Opens man pages picker. |
-| `<leader>sp` | `n` | Search for Plugin Spec | Opens picker for plugin specs. |
+| `<leader>sp` | `n` | Search for Plugin (vim.pack) | Opens a picker of installed `vim.pack` plugins; `<CR>` jumps to the file declaring it. |
 | `<leader>sq` | `n` | Quickfix List | Opens quickfix list picker. |
 | `<leader>sR` | `n` | Resume | Resumes the last Snacks picker. |
 | `<leader>su` | `n` | Undo History | Opens undo history picker. |
@@ -135,7 +128,6 @@ It includes global mappings and context-specific plugin-local mappings. Commente
 | `[b` | `n` | Prev Buffer | Switches to the previous buffer. |
 | `]b` | `n` | Next Buffer | Switches to the next buffer. |
 | `<leader>bb` | `n` | Switch to Other Buffer | Switches to the alternate buffer. |
-| `<leader>\`` | `n` | Switch to Other Buffer | Switches to the alternate buffer. |
 | `<leader>bd` | `n` | Delete Buffer | Deletes the current buffer using Snacks. |
 | `<leader>bo` | `n` | Delete Other Buffers | Deletes all other buffers. |
 | `<leader>bi` | `n` | Delete Invisible Buffers | Deletes buffers not visible in any window. |
@@ -158,8 +150,10 @@ It includes global mappings and context-specific plugin-local mappings. Commente
 | `<leader>gf` | `n` | Git Log File | Opens file history picker. |
 | `<leader>gB` | `n`, `v` | Git Browse (open) | Opens the current file/selection in the remote Git host. |
 | `<leader>gY` | `n`, `x` | Git Browse (copy) | Copies the remote Git URL for the current file/selection. |
-| `<leader>gg` | `n` | Lazygit (Root Dir) | Opens Lazygit at the project root when `lazygit` is installed. |
-| `<leader>gG` | `n` | Lazygit (cwd) | Opens Lazygit in the current working directory when `lazygit` is installed. |
+| `<leader>gg` | `n` | Git | Opens the Fugitive Git status window (`:G`). |
+| `<leader>gt` | `n` | Git Difftool | Buffer-local in the Fugitive status window: runs `:G difftool` for the file (or whole staged/unstaged section) under the cursor. |
+| `<leader>gv` | `n` | Lazygit (Root Dir) | Opens Lazygit at the project root when `lazygit` is installed. |
+| `<leader>gV` | `n` | Lazygit (cwd) | Opens Lazygit in the current working directory when `lazygit` is installed. |
 
 ## Git Hunks (buffer-local, Gitsigns)
 
@@ -169,17 +163,17 @@ These mappings are active only in buffers where Gitsigns is attached.
 | --- | --- | --- | --- |
 | `]c` | `n` | Jump to next git change | Jumps to the next hunk, or uses diff navigation in diff mode. |
 | `[c` | `n` | Jump to previous git change | Jumps to the previous hunk, or uses diff navigation in diff mode. |
-| `<leader>hs` | `n`, `v` | git stage hunk | Stages the current hunk or selected hunk range. |
-| `<leader>hr` | `n`, `v` | git reset hunk | Resets the current hunk or selected hunk range. |
-| `<leader>hS` | `n` | git Stage buffer | Stages the whole buffer. |
-| `<leader>hR` | `n` | git Reset buffer | Resets the whole buffer. |
-| `<leader>hp` | `n` | git preview hunk | Previews the current hunk. |
-| `<leader>hi` | `n` | git preview hunk inline | Shows an inline preview of the current hunk. |
-| `<leader>hb` | `n` | git blame line | Shows full blame for the current line. |
-| `<leader>hd` | `n` | git diff against index | Diffs the buffer against the index. |
-| `<leader>hD` | `n` | git Diff against last commit | Diffs the buffer against the previous commit. |
-| `<leader>hQ` | `n` | git hunk Quickfix list (all files in repo) | Sends all repo hunks to the quickfix list. |
-| `<leader>hq` | `n` | git hunk quickfix list (all changes in this file) | Sends current-file hunks to the quickfix list. |
+| `<leader>ghs` | `n`, `v` | git stage hunk | Stages the current hunk or selected hunk range. |
+| `<leader>ghr` | `n`, `v` | git reset hunk | Resets the current hunk or selected hunk range. |
+| `<leader>ghS` | `n` | git Stage buffer | Stages the whole buffer. |
+| `<leader>ghR` | `n` | git Reset buffer | Resets the whole buffer. |
+| `<leader>ghp` | `n` | git preview hunk | Previews the current hunk. |
+| `<leader>ghi` | `n` | git preview hunk inline | Shows an inline preview of the current hunk. |
+| `<leader>ghb` | `n` | git blame line | Shows full blame for the current line. |
+| `<leader>ghd` | `n` | git diff against index | Diffs the buffer against the index. |
+| `<leader>ghD` | `n` | git Diff against last commit | Diffs the buffer against the previous commit. |
+| `<leader>ghQ` | `n` | git hunk Quickfix list (all files in repo) | Sends all repo hunks to the quickfix list. |
+| `<leader>ghq` | `n` | git hunk quickfix list (all changes in this file) | Sends current-file hunks to the quickfix list. |
 | `<leader>tb` | `n` | Toggle git show blame line | Toggles inline blame for the current line. |
 | `<leader>tw` | `n` | Toggle git intra-line word diff | Toggles word diff highlighting. |
 | `ih` | `o`, `x` | — | Selects the current git hunk as a text object. |
@@ -228,28 +222,50 @@ These mappings are buffer-local and become active when an LSP attaches to the bu
 | --- | --- | --- | --- |
 | `<leader>cf` | `n`, `v` | Code Format | Formats the current buffer or selection using Conform. |
 
+## Completion (blink.cmp)
+
+These mappings are active in insert mode while the completion menu is available (blink.cmp `default` preset).
+
+| Keymap | Mode(s) | Description | What it does |
+| --- | --- | --- | --- |
+| `<C-y>` | `i` | Accept | Accepts the selected completion (auto-imports and expands snippets when supported). |
+| `<C-Space>` | `i` | Open menu / docs | Opens the completion menu, or opens the documentation if the menu is already open. |
+| `<C-n>` / `<Down>` | `i` | Select next | Selects the next completion item. |
+| `<C-p>` / `<Up>` | `i` | Select previous | Selects the previous completion item. |
+| `<C-e>` | `i` | Hide menu | Hides the completion menu. |
+| `<C-k>` | `i` | Toggle signature help | Toggles the signature help window. |
+| `<Tab>` | `i`, `s` | Next snippet stop | Jumps to the next placeholder in an expanded snippet. |
+| `<S-Tab>` | `i`, `s` | Prev snippet stop | Jumps to the previous placeholder in an expanded snippet. |
+
 ## UI / Toggles / Notifications
 
 | Keymap | Mode(s) | Description | What it does |
 | --- | --- | --- | --- |
-| `<leader>us` | `n` | Spelling | Toggles `spell`. |
 | `<leader>uw` | `n` | Wrap | Toggles `wrap`. |
-| `<leader>uL` | `n` | Relative Number | Toggles `relativenumber`. |
 | `<leader>ud` | `n` | Diagnostics | Toggles diagnostics display. |
-| `<leader>ul` | `n` | Line Number | Toggles line numbers. |
 | `<leader>uc` | `n` | Conceallevel | Toggles conceal level. |
 | `<leader>uT` | `n` | Treesitter | Toggles Treesitter highlighting. |
-| `<leader>ub` | `n` | Dark Background | Toggles background between light and dark. |
-| `<leader>uh` | `n` | Inlay Hints | Toggles Snacks inlay hints helper. |
 | `<leader>ug` | `n` | Indent | Toggles Snacks indent guides. |
-| `<leader>uD` | `n` | Dim | Toggles dimming. |
-| `<leader>uz` | `n` | Toggle Zen Mode | Toggles Zen mode. |
 | `<leader>uZ` | `n` | Toggle Zoom | Toggles zoomed Zen window. |
 | `<leader>uC` | `n` | Colorschemes | Opens colorscheme picker. |
 | `<leader>n` | `n` | Notification History | Opens notifications picker. |
 | `<leader>un` | `n` | Dismiss All Notifications | Hides all current notifications. |
-| `<C-/>` | `n` | Toggle Terminal | Opens or hides the Snacks terminal. |
-| `<C-_>` | `n` | which_key_ignore | Alternate terminal toggle keycode for terminals that send `<C-_>`. |
+| `<C-_>` | `n` | Toggle Terminal | Opens or hides the Snacks terminal (keycode many terminals send for `<C-/>`). |
+
+## Notes (Obsidian)
+
+These mappings open Obsidian-vault actions through obsidian.nvim.
+
+| Keymap | Mode(s) | Description | What it does |
+| --- | --- | --- | --- |
+| `<leader>ob` | `n` | Obsidian backlinks | Lists notes that link to the current note. |
+| `<leader>od` | `n` | Obsidian daily note | Opens (or creates) today's daily note. |
+| `<leader>ol` | `n` | Obsidian note links | Lists links contained in the current note. |
+| `<leader>oo` | `n` | Open in Obsidian | Opens the current note in the Obsidian app. |
+| `<leader>oq` | `n` | Obsidian quick switch | Quickly switches to another note. |
+| `<leader>os` | `n` | Search Obsidian notes | Searches the vault for notes. |
+| `<leader>ot` | `n` | Insert Obsidian template | Inserts a template into the current note. |
+| `<leader>oT` | `n` | Obsidian table of contents | Shows the table of contents for the current note. |
 
 ## Sessions
 
@@ -283,6 +299,24 @@ These mappings are buffer-local and become active when an LSP attaches to the bu
 | `<C-s>` | `c` | Toggle Flash Search | Toggles Flash integration in command-line search. |
 | `<C-Space>` | `n`, `o`, `x` | Treesitter Incremental Selection | Starts/advances Treesitter selection through Flash. |
 
+## Text objects & Surround (mini.nvim)
+
+Surround uses the `s` prefix (mini.surround) and the enhanced text objects use `a`/`i` (mini.ai). Because mini.surround maps the `s` prefix, the single-key `s` Flash jump (see above) waits briefly for a following key before triggering.
+
+| Keymap | Mode(s) | Description | What it does |
+| --- | --- | --- | --- |
+| `sa` | `n`, `x` | Surround add | Adds a surrounding around a motion (normal) or selection (visual), e.g. `saiw)`. |
+| `sd` | `n` | Surround delete | Deletes the surrounding, e.g. `sd"`. |
+| `sr` | `n` | Surround replace | Replaces one surrounding with another, e.g. `sr)'`. |
+| `sf` | `n` | Surround find | Finds the nearest surrounding to the right. |
+| `sF` | `n` | Surround find left | Finds the nearest surrounding to the left. |
+| `sh` | `n` | Surround highlight | Highlights the surrounding. |
+| `sn` | `n` | Surround update n_lines | Updates the number of lines mini.surround searches. |
+| `a` / `i` | `o`, `x` | Around / Inside textobject | Operates around/inside the nearest textobject (brackets, quotes, args, etc.). |
+| `aa` / `ii` | `o`, `x` | Around / Inside next | Around/inside the next textobject. |
+| `al` / `il` | `o`, `x` | Around / Inside last | Around/inside the previous textobject. |
+| `g[` / `g]` | `n`, `o`, `x` | Goto textobject edge | Jumps to the left/right edge of the nearest textobject. |
+
 ## Context-specific / plugin-local mappings
 
 These mappings only exist inside a specific plugin buffer or UI.
@@ -292,7 +326,6 @@ These mappings only exist inside a specific plugin buffer or UI.
 | Keymap | Mode(s) | Context | What it does |
 | --- | --- | --- | --- |
 | `<Esc>` | `n`, `i` | Snacks picker input/list and explorer list | Cancels and closes the picker. |
-| `<C-o>` | `n`, `i` | Snacks picker input/list and explorer list | Picks a target window and opens the selected item there. |
 | `<C-e>` | `n`, `i` | Snacks picker input/list | Opens the selected item in a vertical split. |
 | `<A-t>` | `n`, `i` | Snacks picker input | Toggles the custom “Ruby only” grep filter. |
 | `<A-n>` | `n`, `i` | Snacks picker input | Toggles the custom “hide tests” grep filter. |
@@ -305,12 +338,6 @@ These mappings only exist inside a specific plugin buffer or UI.
 | `<C-v>` | `n` | Harpoon quick menu buffer | Opens the selected Harpoon entry in a vertical split. |
 | `<C-x>` | `n` | Harpoon quick menu buffer | Opens the selected Harpoon entry in a horizontal split. |
 | `<C-t>` | `n` | Harpoon quick menu buffer | Opens the selected Harpoon entry in a new tab. |
-
-### Neo-tree
-
-| Keymap | Mode(s) | Context | What it does |
-| --- | --- | --- | --- |
-| `\` | `n` | Neo-tree filesystem window | Closes the Neo-tree window. |
 
 ### Quick-close helper
 

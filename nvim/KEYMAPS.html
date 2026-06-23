@@ -303,7 +303,8 @@
         <p class="subtitle">
           A styled reference for the active custom keymaps in this config, covering
           global mappings and plugin-local mappings that only exist in specific UI
-          contexts.
+          contexts. Only plugins that are actually <code>require</code>d in
+          <code>lua/plugins.lua</code> are included.
         </p>
         <div class="meta">
           <span class="pill">Source: <code>lua/keymaps.lua</code></span>
@@ -327,10 +328,13 @@
             <li><a href="#git">Git</a></li>
             <li><a href="#git-hunks">Git Hunks</a></li>
             <li><a href="#code-lsp-formatting">Code / LSP / Formatting</a></li>
+            <li><a href="#completion">Completion (blink.cmp)</a></li>
             <li><a href="#ui-toggles-notifications">UI / Toggles / Notifications</a></li>
+            <li><a href="#notes-obsidian">Notes (Obsidian)</a></li>
             <li><a href="#sessions">Sessions</a></li>
             <li><a href="#debug">Debug</a></li>
             <li><a href="#motion-jump-plugins">Motion / Jump plugins</a></li>
+            <li><a href="#text-objects-surround">Text objects &amp; Surround</a></li>
             <li><a href="#context-specific">Context-specific / plugin-local</a></li>
           </ul>
         </aside>
@@ -360,6 +364,8 @@
                   <tr><td><code>&lt;A-k&gt;</code></td><td><code>i</code></td><td>Move Up</td><td>Moves the current line up while staying in insert mode.</td></tr>
                   <tr><td><code>&lt;A-j&gt;</code></td><td><code>v</code></td><td>Move Down</td><td>Moves the selected lines down and reindents them.</td></tr>
                   <tr><td><code>&lt;A-k&gt;</code></td><td><code>v</code></td><td>Move Up</td><td>Moves the selected lines up and reindents them.</td></tr>
+                  <tr><td><code>&lt;</code></td><td><code>x</code></td><td>&mdash;</td><td>Indents the selection left and keeps it selected.</td></tr>
+                  <tr><td><code>&gt;</code></td><td><code>x</code></td><td>&mdash;</td><td>Indents the selection right and keeps it selected.</td></tr>
                   <tr><td><code>&lt;leader&gt;p</code></td><td><code>x</code></td><td>&mdash;</td><td>Pastes over a selection without overwriting the default register.</td></tr>
                   <tr><td><code>&lt;leader&gt;_</code></td><td><code>n</code>, <code>v</code></td><td>Delete Without Yanking</td><td>Deletes text into the black-hole register.</td></tr>
                   <tr><td><code>&lt;leader&gt;r</code></td><td><code>n</code>, <code>v</code></td><td>Search &amp; Replace</td><td>Starts a project-wide substitute using the word under cursor.</td></tr>
@@ -412,12 +418,10 @@
                 </thead>
                 <tbody>
                   <tr><td><code>&lt;leader&gt;fn</code></td><td><code>n</code></td><td>New File</td><td>Opens a new empty buffer.</td></tr>
-                  <tr><td><code>\</code></td><td><code>n</code></td><td>NeoTree reveal</td><td>Reveals the current file in Neo-tree.</td></tr>
                   <tr><td><code>&lt;leader&gt;&lt;space&gt;</code></td><td><code>n</code></td><td>Find Files (Root Dir)</td><td>Opens Snacks file picker scoped to the project root.</td></tr>
                   <tr><td><code>&lt;leader&gt;,</code></td><td><code>n</code></td><td>Buffers</td><td>Opens Snacks buffer picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;:</code></td><td><code>n</code></td><td>Command History</td><td>Opens Snacks command history picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;e</code></td><td><code>n</code></td><td>Explorer Snacks (root dir)</td><td>Opens Snacks explorer at the project root.</td></tr>
-                  <tr><td><code>&lt;leader&gt;E</code></td><td><code>n</code></td><td>Explorer Snacks (cwd)</td><td>Opens Snacks explorer at the current working directory.</td></tr>
+                  <tr><td><code>&lt;leader&gt;e</code></td><td><code>n</code></td><td>Explorer (root dir)</td><td>Opens Snacks explorer at the project root.</td></tr>
+                  <tr><td><code>&lt;leader&gt;E</code></td><td><code>n</code></td><td>Explorer (cwd)</td><td>Opens Snacks explorer at the current working directory.</td></tr>
                   <tr><td><code>&lt;leader&gt;fb</code></td><td><code>n</code></td><td>Buffers</td><td>Opens Snacks buffer picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;fB</code></td><td><code>n</code></td><td>Buffers (all)</td><td>Opens buffer picker including hidden and <code>nofile</code> buffers.</td></tr>
                   <tr><td><code>&lt;leader&gt;fc</code></td><td><code>n</code></td><td>Find Config File</td><td>Opens file picker scoped to your Neovim config directory.</td></tr>
@@ -465,21 +469,14 @@
                   <tr><td><code>&lt;leader&gt;sW</code></td><td><code>n</code>, <code>x</code></td><td>Visual selection or word (cwd)</td><td>Greps the word or selection in the current working directory.</td></tr>
                   <tr><td><code>&lt;leader&gt;s"</code></td><td><code>n</code></td><td>Registers</td><td>Opens register picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;s/</code></td><td><code>n</code></td><td>Search History</td><td>Opens search history picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sa</code></td><td><code>n</code></td><td>Autocmds</td><td>Opens autocmd picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sb</code></td><td><code>n</code></td><td>Buffer Lines</td><td>Opens line picker for the current buffer.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sc</code></td><td><code>n</code></td><td>Command History</td><td>Opens command history picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sC</code></td><td><code>n</code></td><td>Commands</td><td>Opens commands picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;sd</code></td><td><code>n</code></td><td>Diagnostics</td><td>Opens diagnostics picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;sD</code></td><td><code>n</code></td><td>Buffer Diagnostics</td><td>Opens diagnostics for the current buffer.</td></tr>
                   <tr><td><code>&lt;leader&gt;sh</code></td><td><code>n</code></td><td>Help Pages</td><td>Opens help tags picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sH</code></td><td><code>n</code></td><td>Highlights</td><td>Opens highlight groups picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;si</code></td><td><code>n</code></td><td>Icons</td><td>Opens icon picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sj</code></td><td><code>n</code></td><td>Jumps</td><td>Opens jumplist picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;sk</code></td><td><code>n</code></td><td>Keymaps</td><td>Opens keymaps picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;sl</code></td><td><code>n</code></td><td>Location List</td><td>Opens location list picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;sm</code></td><td><code>n</code></td><td>Marks</td><td>Opens marks picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sM</code></td><td><code>n</code></td><td>Man Pages</td><td>Opens man pages picker.</td></tr>
-                  <tr><td><code>&lt;leader&gt;sp</code></td><td><code>n</code></td><td>Search for Plugin Spec</td><td>Opens picker for plugin specs.</td></tr>
+                  <tr><td><code>&lt;leader&gt;sp</code></td><td><code>n</code></td><td>Search for Plugin (vim.pack)</td><td>Opens a picker of installed <code>vim.pack</code> plugins; <code>&lt;CR&gt;</code> jumps to the file declaring it.</td></tr>
                   <tr><td><code>&lt;leader&gt;sq</code></td><td><code>n</code></td><td>Quickfix List</td><td>Opens quickfix list picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;sR</code></td><td><code>n</code></td><td>Resume</td><td>Resumes the last Snacks picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;su</code></td><td><code>n</code></td><td>Undo History</td><td>Opens undo history picker.</td></tr>
@@ -564,7 +561,6 @@
                   <tr><td><code>[b</code></td><td><code>n</code></td><td>Prev Buffer</td><td>Switches to the previous buffer.</td></tr>
                   <tr><td><code>]b</code></td><td><code>n</code></td><td>Next Buffer</td><td>Switches to the next buffer.</td></tr>
                   <tr><td><code>&lt;leader&gt;bb</code></td><td><code>n</code></td><td>Switch to Other Buffer</td><td>Switches to the alternate buffer.</td></tr>
-                  <tr><td><code>&lt;leader&gt;`</code></td><td><code>n</code></td><td>Switch to Other Buffer</td><td>Switches to the alternate buffer.</td></tr>
                   <tr><td><code>&lt;leader&gt;bd</code></td><td><code>n</code></td><td>Delete Buffer</td><td>Deletes the current buffer using Snacks.</td></tr>
                   <tr><td><code>&lt;leader&gt;bo</code></td><td><code>n</code></td><td>Delete Other Buffers</td><td>Deletes all other buffers.</td></tr>
                   <tr><td><code>&lt;leader&gt;bi</code></td><td><code>n</code></td><td>Delete Invisible Buffers</td><td>Deletes buffers not visible in any window.</td></tr>
@@ -602,8 +598,10 @@
                   <tr><td><code>&lt;leader&gt;gf</code></td><td><code>n</code></td><td>Git Log File</td><td>Opens file history picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;gB</code></td><td><code>n</code>, <code>v</code></td><td>Git Browse (open)</td><td>Opens the current file or selection in the remote Git host.</td></tr>
                   <tr><td><code>&lt;leader&gt;gY</code></td><td><code>n</code>, <code>x</code></td><td>Git Browse (copy)</td><td>Copies the remote Git URL for the current file or selection.</td></tr>
-                  <tr><td><code>&lt;leader&gt;gg</code></td><td><code>n</code></td><td>Lazygit (Root Dir)</td><td>Opens Lazygit at the project root when <code>lazygit</code> is installed.</td></tr>
-                  <tr><td><code>&lt;leader&gt;gG</code></td><td><code>n</code></td><td>Lazygit (cwd)</td><td>Opens Lazygit in the current working directory when <code>lazygit</code> is installed.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gg</code></td><td><code>n</code></td><td>Git</td><td>Opens the Fugitive Git status window (<code>:G</code>).</td></tr>
+                  <tr><td><code>&lt;leader&gt;gt</code></td><td><code>n</code></td><td>Git Difftool</td><td>Buffer-local in the Fugitive status window: runs <code>:G difftool</code> for the file (or whole staged/unstaged section) under the cursor.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gv</code></td><td><code>n</code></td><td>Lazygit (Root Dir)</td><td>Opens Lazygit at the project root when <code>lazygit</code> is installed.</td></tr>
+                  <tr><td><code>&lt;leader&gt;gV</code></td><td><code>n</code></td><td>Lazygit (cwd)</td><td>Opens Lazygit in the current working directory when <code>lazygit</code> is installed.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -627,17 +625,17 @@
                 <tbody>
                   <tr><td><code>]c</code></td><td><code>n</code></td><td>Jump to next git change</td><td>Jumps to the next hunk, or uses diff navigation in diff mode.</td></tr>
                   <tr><td><code>[c</code></td><td><code>n</code></td><td>Jump to previous git change</td><td>Jumps to the previous hunk, or uses diff navigation in diff mode.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hs</code></td><td><code>n</code>, <code>v</code></td><td>git stage hunk</td><td>Stages the current hunk or selected hunk range.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hr</code></td><td><code>n</code>, <code>v</code></td><td>git reset hunk</td><td>Resets the current hunk or selected hunk range.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hS</code></td><td><code>n</code></td><td>git Stage buffer</td><td>Stages the whole buffer.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hR</code></td><td><code>n</code></td><td>git Reset buffer</td><td>Resets the whole buffer.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hp</code></td><td><code>n</code></td><td>git preview hunk</td><td>Previews the current hunk.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hi</code></td><td><code>n</code></td><td>git preview hunk inline</td><td>Shows an inline preview of the current hunk.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hb</code></td><td><code>n</code></td><td>git blame line</td><td>Shows full blame for the current line.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hd</code></td><td><code>n</code></td><td>git diff against index</td><td>Diffs the buffer against the index.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hD</code></td><td><code>n</code></td><td>git Diff against last commit</td><td>Diffs the buffer against the previous commit.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hQ</code></td><td><code>n</code></td><td>git hunk Quickfix list (all files in repo)</td><td>Sends all repo hunks to the quickfix list.</td></tr>
-                  <tr><td><code>&lt;leader&gt;hq</code></td><td><code>n</code></td><td>git hunk quickfix list (all changes in this file)</td><td>Sends current-file hunks to the quickfix list.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghs</code></td><td><code>n</code>, <code>v</code></td><td>git stage hunk</td><td>Stages the current hunk or selected hunk range.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghr</code></td><td><code>n</code>, <code>v</code></td><td>git reset hunk</td><td>Resets the current hunk or selected hunk range.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghS</code></td><td><code>n</code></td><td>git Stage buffer</td><td>Stages the whole buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghR</code></td><td><code>n</code></td><td>git Reset buffer</td><td>Resets the whole buffer.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghp</code></td><td><code>n</code></td><td>git preview hunk</td><td>Previews the current hunk.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghi</code></td><td><code>n</code></td><td>git preview hunk inline</td><td>Shows an inline preview of the current hunk.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghb</code></td><td><code>n</code></td><td>git blame line</td><td>Shows full blame for the current line.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghd</code></td><td><code>n</code></td><td>git diff against index</td><td>Diffs the buffer against the index.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghD</code></td><td><code>n</code></td><td>git Diff against last commit</td><td>Diffs the buffer against the previous commit.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghQ</code></td><td><code>n</code></td><td>git hunk Quickfix list (all files in repo)</td><td>Sends all repo hunks to the quickfix list.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ghq</code></td><td><code>n</code></td><td>git hunk quickfix list (all changes in this file)</td><td>Sends current-file hunks to the quickfix list.</td></tr>
                   <tr><td><code>&lt;leader&gt;tb</code></td><td><code>n</code></td><td>Toggle git show blame line</td><td>Toggles inline blame for the current line.</td></tr>
                   <tr><td><code>&lt;leader&gt;tw</code></td><td><code>n</code></td><td>Toggle git intra-line word diff</td><td>Toggles word diff highlighting.</td></tr>
                   <tr><td><code>ih</code></td><td><code>o</code>, <code>x</code></td><td>&mdash;</td><td>Selects the current git hunk as a text object.</td></tr>
@@ -733,6 +731,35 @@
             </div>
           </section>
 
+          <section class="section" id="completion">
+            <div class="section-header">
+              <h2>Completion (blink.cmp)</h2>
+              <p>These mappings are active in insert mode while the completion menu is available (blink.cmp <code>default</code> preset).</p>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;C-y&gt;</code></td><td><code>i</code></td><td>Accept</td><td>Accepts the selected completion (auto-imports and expands snippets when supported).</td></tr>
+                  <tr><td><code>&lt;C-Space&gt;</code></td><td><code>i</code></td><td>Open menu / docs</td><td>Opens the completion menu, or opens the documentation if the menu is already open.</td></tr>
+                  <tr><td><code>&lt;C-n&gt;</code> / <code>&lt;Down&gt;</code></td><td><code>i</code></td><td>Select next</td><td>Selects the next completion item.</td></tr>
+                  <tr><td><code>&lt;C-p&gt;</code> / <code>&lt;Up&gt;</code></td><td><code>i</code></td><td>Select previous</td><td>Selects the previous completion item.</td></tr>
+                  <tr><td><code>&lt;C-e&gt;</code></td><td><code>i</code></td><td>Hide menu</td><td>Hides the completion menu.</td></tr>
+                  <tr><td><code>&lt;C-k&gt;</code></td><td><code>i</code></td><td>Toggle signature help</td><td>Toggles the signature help window.</td></tr>
+                  <tr><td><code>&lt;Tab&gt;</code></td><td><code>i</code>, <code>s</code></td><td>Next snippet stop</td><td>Jumps to the next placeholder in an expanded snippet.</td></tr>
+                  <tr><td><code>&lt;S-Tab&gt;</code></td><td><code>i</code>, <code>s</code></td><td>Prev snippet stop</td><td>Jumps to the previous placeholder in an expanded snippet.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <section class="section" id="ui-toggles-notifications">
             <div class="section-header">
               <h2>UI / Toggles / Notifications</h2>
@@ -748,24 +775,45 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td><code>&lt;leader&gt;us</code></td><td><code>n</code></td><td>Spelling</td><td>Toggles <code>spell</code>.</td></tr>
                   <tr><td><code>&lt;leader&gt;uw</code></td><td><code>n</code></td><td>Wrap</td><td>Toggles <code>wrap</code>.</td></tr>
-                  <tr><td><code>&lt;leader&gt;uL</code></td><td><code>n</code></td><td>Relative Number</td><td>Toggles <code>relativenumber</code>.</td></tr>
                   <tr><td><code>&lt;leader&gt;ud</code></td><td><code>n</code></td><td>Diagnostics</td><td>Toggles diagnostics display.</td></tr>
-                  <tr><td><code>&lt;leader&gt;ul</code></td><td><code>n</code></td><td>Line Number</td><td>Toggles line numbers.</td></tr>
                   <tr><td><code>&lt;leader&gt;uc</code></td><td><code>n</code></td><td>Conceallevel</td><td>Toggles conceal level.</td></tr>
                   <tr><td><code>&lt;leader&gt;uT</code></td><td><code>n</code></td><td>Treesitter</td><td>Toggles Treesitter highlighting.</td></tr>
-                  <tr><td><code>&lt;leader&gt;ub</code></td><td><code>n</code></td><td>Dark Background</td><td>Toggles background between light and dark.</td></tr>
-                  <tr><td><code>&lt;leader&gt;uh</code></td><td><code>n</code></td><td>Inlay Hints</td><td>Toggles Snacks inlay hints helper.</td></tr>
                   <tr><td><code>&lt;leader&gt;ug</code></td><td><code>n</code></td><td>Indent</td><td>Toggles Snacks indent guides.</td></tr>
-                  <tr><td><code>&lt;leader&gt;uD</code></td><td><code>n</code></td><td>Dim</td><td>Toggles dimming.</td></tr>
-                  <tr><td><code>&lt;leader&gt;uz</code></td><td><code>n</code></td><td>Toggle Zen Mode</td><td>Toggles Zen mode.</td></tr>
                   <tr><td><code>&lt;leader&gt;uZ</code></td><td><code>n</code></td><td>Toggle Zoom</td><td>Toggles zoomed Zen window.</td></tr>
                   <tr><td><code>&lt;leader&gt;uC</code></td><td><code>n</code></td><td>Colorschemes</td><td>Opens colorscheme picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;n</code></td><td><code>n</code></td><td>Notification History</td><td>Opens notifications picker.</td></tr>
                   <tr><td><code>&lt;leader&gt;un</code></td><td><code>n</code></td><td>Dismiss All Notifications</td><td>Hides all current notifications.</td></tr>
-                  <tr><td><code>&lt;C-/&gt;</code></td><td><code>n</code></td><td>Toggle Terminal</td><td>Opens or hides the Snacks terminal.</td></tr>
-                  <tr><td><code>&lt;C-_&gt;</code></td><td><code>n</code></td><td>which_key_ignore</td><td>Alternate terminal toggle keycode for terminals that send <code>&lt;C-_&gt;</code>.</td></tr>
+                  <tr><td><code>&lt;C-_&gt;</code></td><td><code>n</code></td><td>Toggle Terminal</td><td>Opens or hides the Snacks terminal (keycode many terminals send for <code>&lt;C-/&gt;</code>).</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="notes-obsidian">
+            <div class="section-header">
+              <h2>Notes (Obsidian)</h2>
+              <p>These mappings open Obsidian-vault actions through obsidian.nvim.</p>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&lt;leader&gt;ob</code></td><td><code>n</code></td><td>Obsidian backlinks</td><td>Lists notes that link to the current note.</td></tr>
+                  <tr><td><code>&lt;leader&gt;od</code></td><td><code>n</code></td><td>Obsidian daily note</td><td>Opens (or creates) today's daily note.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ol</code></td><td><code>n</code></td><td>Obsidian note links</td><td>Lists links contained in the current note.</td></tr>
+                  <tr><td><code>&lt;leader&gt;oo</code></td><td><code>n</code></td><td>Open in Obsidian</td><td>Opens the current note in the Obsidian app.</td></tr>
+                  <tr><td><code>&lt;leader&gt;oq</code></td><td><code>n</code></td><td>Obsidian quick switch</td><td>Quickly switches to another note.</td></tr>
+                  <tr><td><code>&lt;leader&gt;os</code></td><td><code>n</code></td><td>Search Obsidian notes</td><td>Searches the vault for notes.</td></tr>
+                  <tr><td><code>&lt;leader&gt;ot</code></td><td><code>n</code></td><td>Insert Obsidian template</td><td>Inserts a template into the current note.</td></tr>
+                  <tr><td><code>&lt;leader&gt;oT</code></td><td><code>n</code></td><td>Obsidian table of contents</td><td>Shows the table of contents for the current note.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -848,6 +896,43 @@
             </div>
           </section>
 
+          <section class="section" id="text-objects-surround">
+            <div class="section-header">
+              <h2>Text objects &amp; Surround (mini.nvim)</h2>
+              <p>
+                Surround uses the <code>s</code> prefix (mini.surround) and the enhanced
+                text objects use <code>a</code>/<code>i</code> (mini.ai). Because mini.surround
+                maps the <code>s</code> prefix, the single-key <code>s</code> Flash jump waits
+                briefly for a following key before triggering.
+              </p>
+            </div>
+            <div class="section-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keymap</th>
+                    <th>Mode(s)</th>
+                    <th>Description</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>sa</code></td><td><code>n</code>, <code>x</code></td><td>Surround add</td><td>Adds a surrounding around a motion (normal) or selection (visual), e.g. <code>saiw)</code>.</td></tr>
+                  <tr><td><code>sd</code></td><td><code>n</code></td><td>Surround delete</td><td>Deletes the surrounding, e.g. <code>sd"</code>.</td></tr>
+                  <tr><td><code>sr</code></td><td><code>n</code></td><td>Surround replace</td><td>Replaces one surrounding with another, e.g. <code>sr)'</code>.</td></tr>
+                  <tr><td><code>sf</code></td><td><code>n</code></td><td>Surround find</td><td>Finds the nearest surrounding to the right.</td></tr>
+                  <tr><td><code>sF</code></td><td><code>n</code></td><td>Surround find left</td><td>Finds the nearest surrounding to the left.</td></tr>
+                  <tr><td><code>sh</code></td><td><code>n</code></td><td>Surround highlight</td><td>Highlights the surrounding.</td></tr>
+                  <tr><td><code>sn</code></td><td><code>n</code></td><td>Surround update n_lines</td><td>Updates the number of lines mini.surround searches.</td></tr>
+                  <tr><td><code>a</code> / <code>i</code></td><td><code>o</code>, <code>x</code></td><td>Around / Inside textobject</td><td>Operates around/inside the nearest textobject (brackets, quotes, args, etc.).</td></tr>
+                  <tr><td><code>aa</code> / <code>ii</code></td><td><code>o</code>, <code>x</code></td><td>Around / Inside next</td><td>Around/inside the next textobject.</td></tr>
+                  <tr><td><code>al</code> / <code>il</code></td><td><code>o</code>, <code>x</code></td><td>Around / Inside last</td><td>Around/inside the previous textobject.</td></tr>
+                  <tr><td><code>g[</code> / <code>g]</code></td><td><code>n</code>, <code>o</code>, <code>x</code></td><td>Goto textobject edge</td><td>Jumps to the left/right edge of the nearest textobject.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <section class="section" id="context-specific">
             <div class="section-header">
               <h2>Context-specific / plugin-local mappings</h2>
@@ -868,7 +953,6 @@
                     </thead>
                     <tbody>
                       <tr><td><code>&lt;Esc&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input/list and explorer list</td><td>Cancels and closes the picker.</td></tr>
-                      <tr><td><code>&lt;C-o&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input/list and explorer list</td><td>Picks a target window and opens the selected item there.</td></tr>
                       <tr><td><code>&lt;C-e&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input/list</td><td>Opens the selected item in a vertical split.</td></tr>
                       <tr><td><code>&lt;A-t&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input</td><td>Toggles the custom “Ruby only” grep filter.</td></tr>
                       <tr><td><code>&lt;A-n&gt;</code></td><td><code>n</code>, <code>i</code></td><td>Snacks picker input</td><td>Toggles the custom “hide tests” grep filter.</td></tr>
@@ -894,25 +978,6 @@
                       <tr><td><code>&lt;C-v&gt;</code></td><td><code>n</code></td><td>Harpoon quick menu buffer</td><td>Opens the selected Harpoon entry in a vertical split.</td></tr>
                       <tr><td><code>&lt;C-x&gt;</code></td><td><code>n</code></td><td>Harpoon quick menu buffer</td><td>Opens the selected Harpoon entry in a horizontal split.</td></tr>
                       <tr><td><code>&lt;C-t&gt;</code></td><td><code>n</code></td><td>Harpoon quick menu buffer</td><td>Opens the selected Harpoon entry in a new tab.</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div class="subsection">
-                <h3>Neo-tree</h3>
-                <div class="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Keymap</th>
-                        <th>Mode(s)</th>
-                        <th>Context</th>
-                        <th>What it does</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr><td><code>\</code></td><td><code>n</code></td><td>Neo-tree filesystem window</td><td>Closes the Neo-tree window.</td></tr>
                     </tbody>
                   </table>
                 </div>
