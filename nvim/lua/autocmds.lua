@@ -70,3 +70,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Disable diagnostics by default for markdown files to avoid visual clutter
+-- (e.g. from markdownlint). They can be toggled back on with <leader>ud
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("disable_markdown_diagnostics"),
+  pattern = "markdown",
+  callback = function(event)
+    -- In Neovim 0.10+, this disables diagnostics for the specific buffer
+    vim.diagnostic.enable(false, { bufnr = event.buf })
+  end,
+})

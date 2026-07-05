@@ -55,6 +55,12 @@ vim.api.nvim_create_autocmd('PackChanged', {
       vim.cmd 'TSUpdate'
       return
     end
+
+    if name == 'markdown-preview.nvim' then
+      -- iamcco/markdown-preview.nvim requires building the web server
+      run_build(name, { 'npx', '--yes', 'yarn', 'install' }, ev.data.path .. '/app')
+      return
+    end
   end,
 })
 

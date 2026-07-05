@@ -29,5 +29,7 @@ require 'azeveco.plugins.vim-tmux-navigator'
 require 'azeveco.plugins.vim-fugitive'
 require 'azeveco.plugins.vim-endwise'
 require 'azeveco.plugins.obsidian-nvim'
+require 'azeveco.plugins.markdown-preview'
+require 'azeveco.plugins.render-markdown'
 
 -- vim: ts=2 sts=2 sw=2 et
