@@ -50,6 +50,7 @@ require("ayu").setup({
   overrides = {
       SnacksDashboardDir = { link = "Normal" },
       SnacksDashboardFile = { link = "Special" },
+      SnacksPickerKeymapRhs = { link = "Comment" }, -- Makes the keymap action text readable
   },
 })
 

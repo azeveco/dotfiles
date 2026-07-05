@@ -126,5 +126,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
       vim.notify("Current line is not a file entry", vim.log.levels.ERROR)
     end, { buffer = event.buf, desc = "Git Difftool" })
+
+    -- Map 'q' to easily close the fugitive buffer
+    vim.keymap.set("n", "q", ":close<cr>", { buffer = event.buf, desc = "Close Fugitive" })
   end,
 })

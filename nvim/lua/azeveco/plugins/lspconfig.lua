@@ -30,7 +30,7 @@ local function gh(repo) return 'https://github.com/' .. repo end
 vim.pack.add { gh 'j-hui/fidget.nvim' }
 require('fidget').setup {}
 
-vim.keymap.set('n', '<leader>cm', '<cmd>Mason<cr>', { desc = 'Mason' })
+vim.keymap.set('n', '<leader>cm', ':Mason<cr>', { desc = 'Mason' })
 
 --  This function gets run when an LSP attaches to a particular buffer.
 --    That is to say, every time a new file is opened that is associated with
@@ -63,7 +63,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Code
     -- These mappings change code or trigger context-aware actions from the active LSP.
-    map('<leader>cl', '<cmd>LspInfo<cr>', 'Lsp Info')
+    map('<leader>cl', ':LspInfo<cr>', 'Lsp Info')
 
     -- Rename the variable under your cursor.
     --  Most Language Servers support renaming across files, etc.
@@ -149,6 +149,7 @@ local servers = {
   -- ts_ls = {},
 
   stylua = {}, -- Used to format Lua code
+  ruby_lsp = {}, -- Added ruby_lsp to configure and load for Ruby files
 
   -- Special Lua Config, as recommended by neovim help docs
   lua_ls = {
@@ -210,9 +211,22 @@ vim.list_extend(ensure_installed, {
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+require('mason-lspconfig').setup()
+
+-- Fetch all LSP servers installed by Mason and add them to our servers table
+local installed_lsps = require('mason-lspconfig').get_installed_servers()
+for _, name in ipairs(installed_lsps) do
+  if not servers[name] then
+    servers[name] = {}
+  end
+end
+
 for name, server in pairs(servers) do
-  vim.lsp.config(name, server)
-  vim.lsp.enable(name)
+  -- Prevent trying to configure non-LSP tools as LSPs (like stylua)
+  if name ~= 'stylua' then
+    vim.lsp.config(name, server)
+    vim.lsp.enable(name)
+  end
 end
 
 -- vim: ts=2 sts=2 sw=2 et

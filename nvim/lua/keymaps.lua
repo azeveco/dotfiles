@@ -8,20 +8,20 @@
 -- Clear highlights on search when pressing <Esc> in normal mode.
 -- Keep insert/select mode on their default behavior so <Esc> still exits them.
 --  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>')
 
 -- Save the current buffer quickly from normal, insert, select, or visual mode.
-vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", ":w<cr><esc>", { desc = "Save File" })
 
 -- Exit terminal mode without needing the default <C-\><C-n> chord.
 -- This is easier to remember when using the builtin terminal.
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Move lines or selections up and down while keeping indentation tidy.
-vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
-vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
-vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
-vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+vim.keymap.set("n", "<A-j>", ":execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+vim.keymap.set("n", "<A-k>", ":execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+vim.keymap.set("i", "<A-j>", "<esc>:m .+1<cr>==gi", { desc = "Move Down" })
+vim.keymap.set("i", "<A-k>", "<esc>:m .-2<cr>==gi", { desc = "Move Up" })
 vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
@@ -86,13 +86,13 @@ vim.keymap.set('n', '<leader>xl', vim.diagnostic.setloclist, { desc = 'Open Diag
 -- This section groups file-oriented actions such as creating a fresh buffer to edit.
 
 -- Open a brand new empty buffer when starting a scratch file.
-vim.keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
+vim.keymap.set("n", "<leader>fn", ":enew<cr>", { desc = "New File" })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+-- vim.keymap.set('n', '<left>', ':echo "Use h to move!!"<CR>')
+-- vim.keymap.set('n', '<right>', ':echo "Use l to move!!"<CR>')
+-- vim.keymap.set('n', '<up>', ':echo "Use k to move!!"<CR>')
+-- vim.keymap.set('n', '<down>', ':echo "Use j to move!!"<CR>')
 
 -- Windows
 -- Window management is split between direct movement keys and leader-based layout actions.
@@ -112,24 +112,24 @@ vim.keymap.set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = tr
 -- Tab actions live under `<leader><tab>` to match the which-key tab category.
 
 -- Navigate and manage tab pages from a single prefix.
-vim.keymap.set("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
-vim.keymap.set("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
-vim.keymap.set("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-vim.keymap.set("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-vim.keymap.set("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-vim.keymap.set("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-vim.keymap.set("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+vim.keymap.set("n", "<leader><tab>l", ":tablast<cr>", { desc = "Last Tab" })
+vim.keymap.set("n", "<leader><tab>o", ":tabonly<cr>", { desc = "Close Other Tabs" })
+vim.keymap.set("n", "<leader><tab>f", ":tabfirst<cr>", { desc = "First Tab" })
+vim.keymap.set("n", "<leader><tab><tab>", ":tabnew<cr>", { desc = "New Tab" })
+vim.keymap.set("n", "<leader><tab>]", ":tabnext<cr>", { desc = "Next Tab" })
+vim.keymap.set("n", "<leader><tab>d", ":tabclose<cr>", { desc = "Close Tab" })
+vim.keymap.set("n", "<leader><tab>[", ":tabprevious<cr>", { desc = "Previous Tab" })
 
 -- Buffers
 -- Buffer navigation and cleanup stay together so buffer-local workflow is easy to scan.
 
 -- Move across the buffer list and jump back to the previous buffer quickly.
-vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
--- vim.keymap.set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+vim.keymap.set("n", "<S-h>", ":bprevious<cr>", { desc = "Prev Buffer" })
+vim.keymap.set("n", "<S-l>", ":bnext<cr>", { desc = "Next Buffer" })
+vim.keymap.set("n", "[b", ":bprevious<cr>", { desc = "Prev Buffer" })
+vim.keymap.set("n", "]b", ":bnext<cr>", { desc = "Next Buffer" })
+vim.keymap.set("n", "<leader>bb", ":e #<cr>", { desc = "Switch to Other Buffer" })
+-- vim.keymap.set("n", "<leader>`", ":e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- Buffer deletion commands include focused cleanup helpers from Snacks.
 vim.keymap.set("n", "<leader>bd", function()
@@ -141,4 +141,4 @@ end, { desc = "Delete Other Buffers" })
 vim.keymap.set("n", "<leader>bi", function()
   require("snacks").bufdelete.invisible()
 end, { desc = "Delete Invisible Buffers" })
-vim.keymap.set("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+vim.keymap.set("n", "<leader>bD", "::bd<cr>", { desc = "Delete Buffer and Window" })
