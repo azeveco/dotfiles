@@ -122,6 +122,9 @@ alias obs="cd ~/Documents/The\ Hivemind/ && nv ."
 eval "$(/opt/homebrew/bin/brew shellenv)"
 source <(fzf --zsh)
 
+# Better CD
+eval "$(zoxide init zsh)"
+
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 eval "$(mise activate zsh)"
@@ -152,3 +155,12 @@ zinit light-mode for \
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 zinit light zdharma-continuum/fast-syntax-highlighting
+
+# yazi cd into dir
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	command rm -f -- "$tmp"
+}
