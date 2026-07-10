@@ -65,8 +65,45 @@ require("snacks").setup({
 
     picker = {
         enabled = true,
+        layouts = {
+            telescope_bottom_pane = {
+                reverse = true,
+                layout = {
+                    box = "vertical",
+                    backdrop = false,
+                    row = -2, -- Floats exactly above the statusline (tweak to -2 if using cmdheight=0)
+                    width = 0, -- Full width
+                    height = 0.4,
+                    {
+                        box = "horizontal",
+                        {
+                            box = "vertical",
+                            border = true,
+                            title = " Results ",
+                            title_pos = "center",
+                            { win = "list" },
+                            { win = "input", height = 1 },
+                        },
+                        {
+                            win = "preview",
+                            title = "{preview:Preview}",
+                            width = 0.45,
+                            border = true,
+                            title_pos = "center",
+                        },
+                    },
+                    {
+                        box = "vertical",
+                        border = "top",
+                        title = " {title} {live} {flags} ",
+                        title_pos = "center",
+                        height = 0.1,
+                    },
+                },
+            },
+        },
         layout = {
-            preset = "telescope",
+            preset = "telescope_bottom_pane",
         },
         formatters = {
             file = {
@@ -194,8 +231,9 @@ vim.keymap.set("n", "<leader><space>", function() require("snacks").picker.files
 vim.keymap.set("n", "<leader>,", function() require("snacks").picker.buffers() end, { desc = "Buffers" })
 vim.keymap.set("n", "<leader>/", function() require("snacks").picker.grep({ cwd = workspace() }) end, { desc = "Grep (Root Dir)" })
 -- vim.keymap.set("n", "<leader>:", function() require("snacks").picker.command_history() end, { desc = "Command History" })
-vim.keymap.set("n", "<leader>e", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer (root dir)" })
-vim.keymap.set("n", "<leader>E", function() require("snacks").explorer() end, { desc = "Explorer (cwd)" })
+-- Swapped e/E: lowercase 'e' uses CWD (persistent global root), uppercase 'E' uses workspace (dynamic subproject root)
+vim.keymap.set("n", "<leader>e", function() require("snacks").explorer() end, { desc = "Explorer (cwd)" })
+vim.keymap.set("n", "<leader>E", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer (root dir)" })
 
 -- File / Find
 -- Dedicated `<leader>f` mappings keep file discovery and project switching together.
@@ -208,8 +246,9 @@ vim.keymap.set("n", "<leader>fg", function() require("snacks").picker.git_files(
 vim.keymap.set("n", "<leader>fp", function() require("snacks").picker.projects() end, { desc = "Projects" })
 vim.keymap.set("n", "<leader>fr", function() require("snacks").picker.recent({ cwd = workspace() }) end, { desc = "Recent" })
 vim.keymap.set("n", "<leader>fR", function() require("snacks").picker.recent({ filter = { cwd = true } }) end, { desc = "Recent (cwd)" })
-vim.keymap.set("n", "<leader>fe", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer Snacks (root dir)" })
-vim.keymap.set("n", "<leader>fE", function() require("snacks").explorer() end, { desc = "Explorer Snacks (cwd)" })
+-- Swapped fe/fE to match the logic above
+vim.keymap.set("n", "<leader>fe", function() require("snacks").explorer() end, { desc = "Explorer Snacks (cwd)" })
+vim.keymap.set("n", "<leader>fE", function() require("snacks").explorer({ cwd = workspace() }) end, { desc = "Explorer Snacks (root dir)" })
 vim.keymap.set("n", "<leader>fs", function() require("snacks").picker.smart() end, { desc = "Smart Find Files" })
 
 -- Git

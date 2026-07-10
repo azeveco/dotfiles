@@ -33,6 +33,8 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
+vim.o.wrap = false
+
 -- conceallevel will be handled specifically by plugins for Markdown files
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -75,6 +77,8 @@ vim.o.timeoutlen = 300
 -- Configure how new splits should be opened
 vim.o.splitright = true
 vim.o.splitbelow = true
+
+vim.opt.winborder = "rounded"
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`

@@ -1,6 +1,7 @@
 macos-option-as-alt = left
 
 theme = "Ayu"
+font-size = 20
 
 # My theme
 # Background and foreground colors

@@ -73,6 +73,8 @@ ZSH_THEME="robbyrussell"
 plugins=(
   git
   rails
+  vi-mode
+  zsh-system-clipboard
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -106,13 +108,22 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+set -o vi
+# MODE_INDICATOR="%F{white}+%f"
+# INSERT_MODE_INDICATOR="%F{yellow}+%f"
+MODE_INDICATOR="%F{#59C2FF}N%f"
+INSERT_MODE_INDICATOR="%F{#7ED962}I%f"
+PROMPT="$PROMPT\$(vi_mode_prompt_info) "
+RPROMPT=""
+# RPROMPT="\$(vi_mode_prompt_info)$RPROMPT ❯"
+
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
 
 alias lg='lazygit'
-alias nv-old="NVIM_APPNAME=old-nvim nvim"
+alias old-nv="NVIM_APPNAME=old-nvim nvim"
 alias nv="NVIM_APPNAME=nvim nvim"
-alias nnv="NVIM_APPNAME=new_nv nvim"
+alias test-nv="NVIM_APPNAME=new_nv nvim"
 
 alias vim="nvim"
 
@@ -124,6 +135,7 @@ source <(fzf --zsh)
 
 # Better CD
 eval "$(zoxide init zsh)"
+alias cd="z"
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

@@ -60,6 +60,58 @@ vim.keymap.set("n", "<C-e>", function()
     harpoon.ui:toggle_quick_menu(harpoon:list())
 end, { desc = "Harpoon Quick Menu" })
 
+-- Custom Snacks.picker integration for Harpoon (Vertical layout with preview)
+vim.keymap.set("n", "<leader>he", function()
+    local harpoon_list = harpoon:list()
+
+    Snacks.picker({
+        title = "Harpoon List",
+        finder = function()
+            local file_paths = {}
+            for _, item in ipairs(harpoon_list.items) do
+                if item and item.value and item.value ~= "" then
+                    table.insert(file_paths, {
+                        text = item.value,
+                        file = item.value,
+                    })
+                end
+            end
+            return file_paths
+        end,
+        format = "file",
+        layout = { preset = "vertical" },
+        actions = {
+            harpoon_delete = function(picker)
+                local item = picker:current()
+                if not item then return end
+                local extensions = require("harpoon.extensions")
+                for idx, h_item in ipairs(harpoon_list.items) do
+                    if h_item.value == item.file then
+                        table.remove(harpoon_list.items, idx)
+                        harpoon_list._length = harpoon_list._length - 1
+                        extensions.extensions:emit(
+                            extensions.event_names.REMOVE,
+                            { list = harpoon_list, item = h_item, idx = idx }
+                        )
+                        break
+                    end
+                end
+                -- Refresh the picker
+                picker:find()
+            end,
+        },
+        win = {
+            input = {
+                keys = {
+                    ["<c-x>"] = { "harpoon_delete", mode = { "i", "n" } },
+                    ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+                    ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+                },
+            },
+        },
+    })
+end, { desc = "Harpoon Snacks Search" })
+
 -- Quick jump bindings (1 through 4)
 for i = 1, 4 do
     vim.keymap.set("n", "<leader>" .. i, function()
